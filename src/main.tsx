@@ -8,10 +8,11 @@ import {
 	RouterProvider,
 } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
-import Root from '../routes/root.tsx';
 import ErrorPage from '../routes/ErrorPage.tsx';
 import Page from '../components/atoms/Page.tsx';
 import Backoffice from '../routes/Backoffice/Backoffice.tsx';
+import { Dimejsonering } from '../components/Eksperimenter/Dimejsonering.tsx';
+import { Startside } from '../routes/Startside.tsx';
 
 // Tutorial jeg brukte: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_container_queries
 const router = createBrowserRouter(
@@ -20,8 +21,8 @@ const router = createBrowserRouter(
 			<Route
 				path={Urls.index}
 				element={
-					<Page tittel={'Hjemmesiden'}>
-						<Root />
+					<Page tittel={'Startside'}>
+						<Startside />
 					</Page>
 				}
 				errorElement={
@@ -35,6 +36,14 @@ const router = createBrowserRouter(
 				element={
 					<Page tittel={'Backoffice'}>
 						<Backoffice />
+					</Page>
+				}
+			/>
+			<Route
+				path={Urls.dimensjonering}
+				element={
+					<Page tittel={'Dimensjonering'}>
+						<Dimejsonering />
 					</Page>
 				}
 			/>

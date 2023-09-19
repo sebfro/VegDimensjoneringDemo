@@ -27,7 +27,7 @@ export const HovedKnappCss = css`
 export const SekundærKnappCss = css`
 	:not(:disabled) {
 		:hover {
-			background: #030405;
+			background: ${Colors.grå};
 			border-width: 3px;
 			padding: 1rem calc(2rem - 1px);
 		}
@@ -35,7 +35,7 @@ export const SekundærKnappCss = css`
 		:focus-within {
 			outline: 3px solid ${Colors.oransje};
 			outline-offset: 3px;
-			background: #030405;
+			background: ${Colors.grå};
 			border-width: 3px;
 			padding: 1rem calc(2rem - 1px);
 		}

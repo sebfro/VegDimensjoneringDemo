@@ -1,9 +1,8 @@
 export const Urls = {
 	index: '/',
-	playground: '/playground',
-	opplasting: '/opplasting',
-	oversikt: '/oversikt',
-	fullført: '/fullfort',
+	dimensjoneringsGrunnlag: '/dimensjoneringsgrunnlag',
+	dimensjonering: '/dimensjonering',
+	posisjon: '/posisjon',
 	innlogging: '/login',
 	backoffice: {
 		index: '/backoffice',

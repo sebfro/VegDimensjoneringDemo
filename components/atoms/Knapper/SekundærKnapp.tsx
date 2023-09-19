@@ -4,6 +4,7 @@ import { Colors } from '../../../styles/colors.ts';
 import { FC } from 'react';
 import { Loader } from '../loading/Loader.tsx';
 import { SekundærKnappCss } from './FellesCss.ts';
+import { TextStyles } from '../../../styles/TextStyles.ts';
 
 export const SekundærKnapp: FC<ButtonProps> = (props) => {
 	return <StyledButton {...props}>{props.laster && <Loader size='button' />}</StyledButton>;
@@ -12,10 +13,14 @@ export const SekundærKnapp: FC<ButtonProps> = (props) => {
 export const StyledButton = styled(Button)`
 	width: fit-content;
 	max-height: 64px;
+	border: 1px solid black;
+	border-radius: 0;
+	color: black;
+	${TextStyles.BodyMedium};
 
 	:active {
 		background-color: ${Colors.oransje};
-		color: ${Colors.hvit};
+		color: black;
 	}
 
 	--transitionTime: 0.2s;

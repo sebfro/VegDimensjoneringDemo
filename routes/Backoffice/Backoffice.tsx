@@ -9,10 +9,6 @@ const Backoffice: FC = () => {
 		<StyledContainer>
 			<TittelStorTekst>Backoffice</TittelStorTekst>
 			<a href={Urls.index}>Gå hovedsiden</a>
-			<a href={Urls.oversikt}>Gå til oversikt</a>
-			<a href={Urls.opplasting}>Gå til opplating</a>
-			<a href={Urls.playground}>Gå til playground</a>
-			<a href={Urls.fullført}>Gå til fullført</a>
 			<a href={Urls.backoffice.kodeverk}>Gå til kodeverk</a>
 		</StyledContainer>
 	);
