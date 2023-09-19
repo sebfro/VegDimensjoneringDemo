@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "v1",
+  "type": "Deployment",
+  "spec": {
+    "name": "vegbilder-opplasting-web",
+    "image": {
+      "type": "ImageReferenceDescriptor",
+      "spec": {
+        "imageRepositoryName": "atlas-docker.artrepo.vegvesen.no/vegfoto/vegbilder-opplasting-web",
+        "tag": "1.0.0",
+        "port": 8080
+      },
+      "resources": [
+        {
+          "type": "MemResources",
+          "spec": {
+            "min": "32M",
+            "max": "500M"
+          }
+        },
+        {
+          "type": "CpuResources",
+          "spec": {
+            "min": "50m"
+          }
+        }
+      ]
+    }
+  }
+}

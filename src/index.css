@@ -1,0 +1,136 @@
+/*Henter inn de forskjellige LFT Etica stilene.*/
+@font-face {
+  font-display: swap;
+  font-family: 'LFT Etica';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../styles/fonts/LFTEticaLt.woff') format('woff');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'LFT Etica';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../styles/fonts/LFT_Etica_Reg.woff') format('woff');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'LFT Etica';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../styles/fonts/LFT_Etica_SemiBold.woff') format('woff');
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'LFT Etica', sans-serif;
+  color: #2E3539;
+  /**
+  disable pull-to-refresh on mobile devices
+  https://usefulangle.com/post/278/html-disable-pull-to-refresh-with-css
+   */
+  overscroll-behavior-y: contain;
+}
+
+p,
+h1,
+h2,
+h3,
+h4 {
+  color: #2E3539;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/*Trenger denne hvis vi skal ha dropdown*/
+/*:root {*/
+/*  !* Icon paths *!*/
+/*  --dropdown-expand: url(../public/iconsSvg/dropdown-expand.svg);*/
+/*  --dropdown-collapse: url(../public/iconsSvg/dropdown-collapse.svg);*/
+/*}*/
+
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+html,
+body {
+  min-height: 100dvh;
+  background-color: #F5F5F5;
+}
+/*
+	img tag har display type inline som standard. Det gjør at den har line-height.
+	Dette leder til at vi ender opp med en ekstra margin som gjør at bilde blir større
+	en vorventet.
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/*
+Root stacking context: Denne har blitt lagt til for å unngå en "z-index arms race".
+Kan brukes til å isolorer komponenter og la dem ligge på toppen uten at andre
+komponenter plutselig ligger på toppen.
+*/
+#root {
+  isolation: isolate;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+*:focus-visible {
+  outline: none;
+}
+
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+/* https://thatemil.com/blog/2015/01/03/reset-your-fieldset/ */
+legend {
+  padding: 0;
+  display: table;
+}
+fieldset {
+  border: 0;
+  padding: 0.01em 0 0 0;
+  margin: 0;
+  min-width: 0;
+}
+body:not(:-moz-handler-blocked) fieldset {
+  display: table-cell;
+}
+/* https://thatemil.com/blog/2015/01/03/reset-your-fieldset/ */
