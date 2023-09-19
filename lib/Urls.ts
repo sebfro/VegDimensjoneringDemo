@@ -3,6 +3,7 @@ export const Urls = {
 	dimensjoneringsGrunnlag: '/dimensjoneringsgrunnlag',
 	dimensjonering: '/dimensjonering',
 	posisjon: '/posisjon',
+	grunnlag: '/grunnlag',
 	innlogging: '/login',
 	backoffice: {
 		index: '/backoffice',

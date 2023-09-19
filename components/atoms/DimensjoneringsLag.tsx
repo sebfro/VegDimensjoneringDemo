@@ -22,15 +22,11 @@ export const DimensjoneringsLag: FC<LagProps> = ({ lagListe, fargeMap }) => {
 	const antallLag = lagListe.reduce((acc, lag) => {
 		return lag.aktiv ? acc + 1 : acc;
 	}, 0);
-	console.log(antallLag);
 	return lagListe
 		.filter((lag) => lag.aktiv)
 		.map((lag, index) => {
 			if (!lag.aktiv) return;
 			accHøyde += lag.høyde;
-			console.log(antallLag);
-			console.log(index);
-			console.log(index === antallLag);
 			return (
 				<ArcherElement id={'rektangel' + index} key={index}>
 					<Rad>

@@ -13,6 +13,8 @@ import Page from '../components/atoms/Page.tsx';
 import Backoffice from '../routes/Backoffice/Backoffice.tsx';
 import { Dimejsonering } from '../components/Eksperimenter/Dimejsonering.tsx';
 import { Startside } from '../routes/Startside.tsx';
+import { Posisjon } from '../routes/Posisjon.tsx';
+import { Grunnlag } from '../routes/Grunnlag.tsx';
 
 // Tutorial jeg brukte: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_container_queries
 const router = createBrowserRouter(
@@ -44,6 +46,22 @@ const router = createBrowserRouter(
 				element={
 					<Page tittel={'Dimensjonering'}>
 						<Dimejsonering />
+					</Page>
+				}
+			/>
+			<Route
+				path={Urls.posisjon}
+				element={
+					<Page tittel={'Posisjon'}>
+						<Posisjon />
+					</Page>
+				}
+			/>
+			<Route
+				path={Urls.grunnlag}
+				element={
+					<Page tittel={'Grunnlad'}>
+						<Grunnlag />
 					</Page>
 				}
 			/>

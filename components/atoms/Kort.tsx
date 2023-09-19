@@ -6,11 +6,12 @@ interface KortProps {
 	children: React.ReactNode;
 	className?: string;
 	color?: CSSProperties['color'];
+	tabIndex?: number;
 }
 
-const Kort: FC<KortProps> = ({ children, className, color }) => {
+const Kort: FC<KortProps> = ({ children, className, color, tabIndex }) => {
 	return (
-		<StyledKort color={color} className={className}>
+		<StyledKort color={color} className={className} tabIndex={tabIndex}>
 			{children}
 		</StyledKort>
 	);

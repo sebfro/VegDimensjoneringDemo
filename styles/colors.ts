@@ -5,7 +5,7 @@ export const Colors = {
 	mørkOransje: '#9B5B00',
 	hvit: '#FFFFFF',
 	grå: '#9C9C9C',
-	lysGrå: '#858D90',
+	lysGrå: '#ECECEC',
 	rød: '#B63434',
 	blå: '#065E7F',
 	lysBlå: '#49A4A8',

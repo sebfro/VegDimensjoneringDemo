@@ -2,45 +2,48 @@ import { FC } from 'react';
 import { Container } from '../styles/BasePageLayout';
 import styled from 'styled-components';
 import Kort from '../components/atoms/Kort';
-import { SekundærKnapp } from '../components/atoms/Knapper/SekundærKnapp';
+import SekundærKnapp from '../components/atoms/Knapper/SekundærKnapp';
 import {
 	BodyLitenTekst,
 	BodyMediumTekst,
 	TittelLitenTekst,
-	TittelMediumTekst,
+	TittelStorTekst,
 } from '../components/atoms/TekstKomponenter.ts';
 import HovedKnapp from '../components/atoms/Knapper/HovedKnapp.tsx';
+import { useNavigate } from 'react-router-dom';
+import { Urls } from '../lib/Urls.ts';
 
 export const Startside: FC = () => {
+	const naviagtion = useNavigate();
+
 	return (
-		<Container>
+		<StyledContainer>
 			<Banner>
 				<Kolonne>
-					<TittelMediumTekst>VegDim</TittelMediumTekst>
+					<TittelStorTekst>VegDim</TittelStorTekst>
 					<BodyMediumTekst>
 						Vegvesenets system for dimensjonering og analyse av vegoverbygninger.
 					</BodyMediumTekst>
-					<HovedKnapp tekst='Start dimensjonering' />
+					<HovedKnapp tekst='Start dimensjonering' onClick={() => naviagtion(Urls.posisjon)} />
 				</Kolonne>
+				<Placeholder />
 			</Banner>
-			<Kort>
+			<StyledKort>
 				<Banner>
 					<Placeholder />
 					<Kolonne>
-						<TittelLitenTekst>
-							Hvordan hjelper VegDim deg å regne ut forventet tilstandsutvikling
-						</TittelLitenTekst>
-						<BodyLitenTekst>
+						<Tittel>Hvordan hjelper VegDim deg å regne ut forventet tilstandsutvikling</Tittel>
+						<Beskrivelse>
 							Vegdim bygger på to type beregninger: respons og tilstandsutvikling. Responsmodellen
 							bruker mekanistiske prinsipper til å beregne spenninger og tøyninger som oppstår under
 							hjullasten. Videre bruker vi tilstandsutviklingmodellen til å beregne deformasjon og
 							slitasje i vegoverbygningen.
-						</BodyLitenTekst>
-						<SekundærKnapp tekst={'Lær mer om modellene bak løsningen'} color='red' />
+						</Beskrivelse>
+						<SekundærKnapp tekst={'Lær mer om modellene bak løsningen'} />
 					</Kolonne>
 				</Banner>
-			</Kort>
-		</Container>
+			</StyledKort>
+		</StyledContainer>
 	);
 };
 
@@ -60,4 +63,21 @@ const Placeholder = styled.div`
 	flex-basis: 40%;
 
 	background-color: red;
+`;
+
+const StyledContainer = styled(Container)`
+	row-gap: 6.5rem;
+	padding-top: 10.25rem;
+`;
+
+const StyledKort = styled(Kort)`
+	padding: 2.125rem 3.375rem;
+`;
+
+const Tittel = styled(TittelLitenTekst)`
+	margin-bottom: 1.375rem;
+`;
+
+const Beskrivelse = styled(BodyLitenTekst)`
+	margin-bottom: 2.5rem;
 `;

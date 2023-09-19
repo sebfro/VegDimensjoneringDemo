@@ -8,6 +8,7 @@ import { DimensjoneringsLag } from '../atoms/DimensjoneringsLag.tsx';
 import { useCallback, useState } from 'react';
 import { TextStyles } from '../../styles/TextStyles.ts';
 import Kort from '../atoms/Kort.tsx';
+import { Container } from '../../styles/BasePageLayout.ts';
 
 export type LagType = {
 	høyde: number;
@@ -138,42 +139,44 @@ export const Dimejsonering = () => {
 
 	return (
 		<Container>
-			<CheckboxKolonne>
-				<HeaderOne>Lag</HeaderOne>
-				<CheckboxContainer>
-					{lagListe.map((checkBox, index) => (
-						<CheckBox
-							handleOnClick={() => handleToggleCheckbox(index)}
-							buttonLabel={checkBox.navn}
-							key={index}
-							selected={checkBox.aktiv}
-						/>
-					))}
-				</CheckboxContainer>
-			</CheckboxKolonne>
-			<ArcherContainer strokeColor={Colors.grå}>
-				<BæreEvneGruppe>
-					<HeaderOne>Materiale</HeaderOne>
-					<InputKolonne>{genererDropdown()}</InputKolonne>
-					<HeaderOne>Tykkelse</HeaderOne>
-					<InputKolonne>{genererInputFelt()}</InputKolonne>
-					<LagContainer>
-						<Lagene>
-							<LinjeWrapper>
-								<Linje />
-								<p>0</p>
-							</LinjeWrapper>
-							<DimensjoneringsLag fargeMap={fargeMap} lagListe={lagListe} />
-						</Lagene>
-					</LagContainer>
-					<Målestokk></Målestokk>
-				</BæreEvneGruppe>
-			</ArcherContainer>
+			<StyledKort>
+				<CheckboxKolonne>
+					<HeaderOne>Lag</HeaderOne>
+					<CheckboxContainer>
+						{lagListe.map((checkBox, index) => (
+							<CheckBox
+								handleOnClick={() => handleToggleCheckbox(index)}
+								buttonLabel={checkBox.navn}
+								key={index}
+								selected={checkBox.aktiv}
+							/>
+						))}
+					</CheckboxContainer>
+				</CheckboxKolonne>
+				<ArcherContainer strokeColor={Colors.grå}>
+					<BæreEvneGruppe>
+						<HeaderOne>Materiale</HeaderOne>
+						<InputKolonne>{genererDropdown()}</InputKolonne>
+						<HeaderOne>Tykkelse</HeaderOne>
+						<InputKolonne>{genererInputFelt()}</InputKolonne>
+						<LagContainer>
+							<Lagene>
+								<LinjeWrapper>
+									<Linje />
+									<p>0</p>
+								</LinjeWrapper>
+								<DimensjoneringsLag fargeMap={fargeMap} lagListe={lagListe} />
+							</Lagene>
+						</LagContainer>
+						<Målestokk></Målestokk>
+					</BæreEvneGruppe>
+				</ArcherContainer>
+			</StyledKort>
 		</Container>
 	);
 };
 
-const Container = styled(Kort)`
+const StyledKort = styled(Kort)`
 	display: grid;
 	grid-template-columns: 1fr 3fr;
 `;
