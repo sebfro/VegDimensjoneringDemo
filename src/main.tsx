@@ -66,7 +66,8 @@ const router = createBrowserRouter(
 				}
 			/>
 		</Route>
-	)
+	),
+	{ basename: import.meta.env.DEV ? '/' : '/react-vite-gh-pages/' }
 );
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
