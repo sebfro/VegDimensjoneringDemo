@@ -16,3 +16,4 @@ export { SvvLogo } from './SvvLogoMedTekst.tsx';
 export { Mappe } from './Mappe.tsx';
 export { LagType1 } from './Lag/LagType1.tsx';
 export { CheckMark } from './CheckMark.tsx';
+export { Rediger } from './Rediger.tsx';

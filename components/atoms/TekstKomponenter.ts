@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css, CSSProperties } from 'styled-components';
 import { TextStyles } from '../../styles/TextStyles';
 
 const {
@@ -24,10 +24,20 @@ export const TittelLitenTekst = styled.h3`
 export const BodyStorTekst = styled.p`
 	${BodyStor};
 `;
-export const BodyMediumTekst = styled.p`
+export const BodyMediumTekst = styled.p<{ farge?: CSSProperties['color'] }>`
+	${(props) =>
+		props.farge &&
+		css`
+			color: ${props.farge};
+		`};
 	${BodyMedium};
 `;
-export const BodyLitenTekst = styled.p`
+export const BodyLitenTekst = styled.p<{ farge?: CSSProperties['color'] }>`
+	${(props) =>
+		props.farge &&
+		css`
+			color: ${props.farge};
+		`};
 	${BodyLiten};
 `;
 export const KnappTekst = styled.p`

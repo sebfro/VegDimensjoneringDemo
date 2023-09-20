@@ -7,6 +7,7 @@ import { Footer } from '../components/atoms/Knapper/Footer.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
 import KnappKort from '../components/atoms/Knapper/KnappKort.tsx';
+import { AkselKonfigurasjon } from '../components/domain/DimensjoneringsGrunnlag/AkselKonfigurasjon.tsx';
 
 export const Grunnlag = () => {
 	const navigation = useNavigate();
@@ -28,9 +29,7 @@ export const Grunnlag = () => {
 					<GråKort>
 						<p>Placeholder</p>
 					</GråKort>
-					<GråKort>
-						<p>Placeholder</p>
-					</GråKort>
+					<AkselKonfigurasjon />
 				</HøyreKolonne>
 				<Posisjon>
 					<PosisjonInnehold></PosisjonInnehold>
@@ -73,6 +72,7 @@ const PosisjonInnehold = styled.div`
 const GråKort = styled(Kort)`
 	background-color: ${Colors.lysGrå};
 	border-radius: 0;
+	margin-bottom: 2.125rem;
 `;
 
 const Kjørefelt = styled.div`

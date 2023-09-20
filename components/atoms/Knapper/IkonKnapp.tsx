@@ -1,109 +1,180 @@
-import { FC } from 'react';
-import { Icons } from '../SVG/SvgGetter/Icons';
-import Button, { ButtonProps } from './Button';
-import styled, { css, CSSProperties, ThemedStyledProps } from 'styled-components';
-import { Colors } from '../../../styles/colors';
-import SvgGetter from '../SVG/SvgGetter/SvgGetter';
-import { HovedKnappCss } from './FellesCss.ts';
+import React, { useCallback, useState } from 'react';
+import styled, { css } from 'styled-components';
+import { Icons } from '../SVG/SvgGetter/Icons.ts';
+import { Colors } from '../../../styles/colors.ts';
+import SvgGetter from '../SVG/SvgGetter/SvgGetter.tsx';
+import FocusOutline from '../StyledComponents/FocusOutline.tsx';
+import { Loader } from '../loading/Loader.tsx';
+import { TextStyles } from '../../../styles/TextStyles.ts';
 
-type KnappType = 'hoved' | 'gjennomsiktig';
-
-type IkonPositionType = 'venstre' | 'høyre';
-
-interface IkonKnappProps extends ButtonProps {
+interface CircleButtonProps {
 	ikon: Icons;
-	ikonFarge?: CSSProperties['color'];
-	knappType?: KnappType;
-	ikonPosisjon?: IkonPositionType;
+	onClick?: (e: any) => void;
+	className?: string;
+	tekst?: string;
+	href?: string;
+	downloadFileName?: string;
+	svgColor?: string;
+	iconSize?: number;
+	backgroundColor?: string;
+	border?: boolean;
+	circle?: boolean;
+	label?: string;
+	type?: 'button' | 'submit';
+	useStroke?: boolean;
+	loading?: boolean;
+	disabled?: boolean;
 }
-
-/**
- * @param ikon Hvilket ikon som skal brukes
- * @param ikonFarge Fargen på ikonet
- * @param ikonPosisjon Om ikonet skal være på høyre eller venstre side. Høyre er default.
- * @param knappType Enten Hoved eller gjennomsiktig. Hoved er default
- * @param className
- * @param tekst Teksten som skal vises
- * @param props Samme som det som ligger i ButtonProps. Hovedsaklig: React.ButtonHTMLAttributes<HTMLButtonElement>
- * @constructor
- */
-const IkonKnapp: FC<IkonKnappProps> = ({
+const IconButton: React.FC<CircleButtonProps> = ({
 	ikon,
-	ikonFarge = Colors.hvit,
-	ikonPosisjon = 'høyre',
-	knappType = 'hoved',
+	onClick,
 	className,
 	tekst,
-	...props
+	href,
+	downloadFileName,
+	svgColor = Colors.primaryTekst,
+	iconSize = 40,
+	backgroundColor = 'white',
+	border = true,
+	circle = true,
+	label = 'default-label',
+	type = 'button',
+	useStroke = false,
+	loading = false,
+	disabled = false,
 }) => {
-	let styling: ThemedStyledProps<any, any> = css`
-		background-color: ${Colors.oransje};
-		color: ${Colors.hvit};
-	`;
-	switch (knappType) {
-		case 'hoved':
-			styling = css`
-				background-color: ${Colors.oransje};
-				color: ${Colors.hvit};
-				border-color: ${Colors.oransje};
-				height: 64px;
-				${HovedKnappCss};
-			`;
-			break;
-		case 'gjennomsiktig':
-			styling = css`
-				background-color: transparent;
-				color: ${Colors.hvit};
-				height: 40px;
-				padding: 0 1rem 0 0;
-				border: none;
+	const [focus, setFocus] = useState(false);
 
-				:focus-within {
-					outline: 3px solid ${Colors.oransje};
-					outline-offset: 3px;
-					background: #030405;
-				}
+	const updateFocusState = useCallback((value: boolean) => {
+		setFocus(value);
+	}, []);
+	const ButtonProps = {
+		useStroke: useStroke,
+		onFocus: () => updateFocusState(true),
+		onBlur: () => updateFocusState(false),
+		backgroundColor: backgroundColor,
+		border: border,
+		circle: circle,
+		iconSize: iconSize,
+		'aria-label': label,
+		disabled,
+	};
 
-				:hover {
-					background: #030405;
-				}
-
-				:focus-visible {
-					outline: 1px solid ${Colors.oransje};
-					background-color: transparent;
-				}
-			`;
+	const IconWithText = (
+		<>
+			<SvgGetter fill={svgColor} icon={ikon} />
+			{tekst && <p>{tekst}</p>}
+		</>
+	);
+	let LinkElement = undefined;
+	if (href) {
+		LinkElement = downloadFileName ? (
+			<DownloadLink {...ButtonProps} href={href} download={downloadFileName} className={className}>
+				{IconWithText}
+			</DownloadLink>
+		) : (
+			<AhrefWrapper {...ButtonProps} href={href}>
+				{IconWithText}
+			</AhrefWrapper>
+		);
 	}
+
 	return (
-		<StyledButton
-			{...props}
-			styling={styling}
-			tekst={tekst}
-			className={className}
-			ikonPosisjon={ikonPosisjon}
-		>
-			<StyledSvgGetter pathFill={ikonFarge} icon={ikon} wrapSvg={true} />
-		</StyledButton>
+		<FocusOutline className={className} circle focus={focus} offset={10}>
+			{LinkElement ? (
+				LinkElement
+			) : (
+				<ButtonWrapper {...ButtonProps} onClick={onClick} type={type}>
+					{IconWithText}
+					{loading && <Loader size='button' />}
+				</ButtonWrapper>
+			)}
+		</FocusOutline>
 	);
 };
 
-export default IkonKnapp;
+export default IconButton;
 
-const StyledButton = styled(Button)<{
-	styling: ThemedStyledProps<any, any>;
-	ikonPosisjon: IkonPositionType;
-}>`
-	height: 2.5rem;
-	${({ styling }) => styling}
+interface IconButtonStylingProps {
+	backgroundColor: string;
+	border: boolean;
+	circle: boolean;
+	iconSize: number;
+	useStroke?: boolean;
+	disabled?: boolean;
+}
+
+const IconButtonStyling = css<IconButtonStylingProps>`
 	display: flex;
+	justify-content: center;
 	align-items: center;
-	width: fit-content;
-	white-space: nowrap;
-	${({ ikonPosisjon }) =>
-		ikonPosisjon === 'høyre' &&
+	padding: 0;
+	column-gap: 0.5em;
+	p {
+		margin: 0.6em 0 0;
+	}
+	${({ circle }) =>
+		circle &&
 		css`
-			flex-direction: row-reverse;
-		`};
+			border-radius: 100%;
+		`}
+	${({ border }) =>
+		border
+			? css`
+					border: 2px solid ${Colors.sort};
+			  `
+			: css`
+					border: none;
+			  `};
+	background-color: ${({ backgroundColor }) => backgroundColor};
+
+	:hover {
+		cursor: pointer;
+		border: 3px solid ${Colors.primaryTekst};
+		path {
+			${({ useStroke = false }) =>
+				useStroke
+					? css`
+							stroke: ${Colors.primaryTekst};
+					  `
+					: css`
+							fill: ${Colors.primaryTekst};
+					  `}
+		}
+	}
+	${({ iconSize }) =>
+		iconSize
+			? css`
+					width: ${iconSize.toString() + 'px'};
+					height: ${iconSize.toString() + 'px'};
+			  `
+			: css`
+					width: min-content;
+					height: min-content;
+			  `};
 `;
 
-const StyledSvgGetter = styled(SvgGetter)``;
+const AhrefWrapper = styled.a`
+	${IconButtonStyling}
+`;
+
+const DownloadLink = styled.a`
+	${IconButtonStyling};
+	width: fit-content;
+	justify-content: flex-start;
+	:hover {
+		border: none;
+	}
+	p {
+		${TextStyles.Knapp};
+		color: ${Colors.primaryTekst};
+		text-decoration: underline;
+		text-underline-offset: 5px;
+		text-underline-color: ${Colors.grå};
+		text-decoration-thickness: 1px;
+	}
+`;
+
+const ButtonWrapper = styled.button`
+	${IconButtonStyling}
+`;
