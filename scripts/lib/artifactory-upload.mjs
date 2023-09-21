@@ -81,5 +81,9 @@ export function getAuthHeader() {
  * @return {string}
  */
 export function getPackageUrl(repository, artifactName, filename) {
-	return `https://artrepo.vegvesen.no/artifactory/${repository}/no/vegvesen/vegfoto/${artifactName}/${filename}`;
+	// TODO: Bytt tilbake til artrepo når vi har fått miljøer hos SVV
+	const publicRepository = `https://registry.npmjs.org/artifactory/${repository}/no/vegvesen/vegfoto/${artifactName}/${filename}`;
+	// const vegvesenRepository = `https://artrepo.vegvesen.no/artifactory/${repository}/no/vegvesen/vegfoto/${artifactName}/${filename}`
+	return publicRepository;
+	// return `https://artrepo.vegvesen.no/artifactory/${repository}/no/vegvesen/vegfoto/${artifactName}/${filename}`;
 }
