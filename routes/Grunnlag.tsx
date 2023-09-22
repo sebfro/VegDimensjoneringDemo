@@ -7,10 +7,27 @@ import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
 import KnappKort from '../components/atoms/Knapper/KnappKort.tsx';
 import { AkselKonfigurasjon } from '../components/domain/DimensjoneringsGrunnlag/AkselKonfigurasjon.tsx';
-import { TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
+import { Felt, TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
+import { useCallback, useState } from 'react';
 
 export const Grunnlag = () => {
 	const navigation = useNavigate();
+	const [trafikkData, setTrafikkData] = useState<Map<Felt, number | undefined>>(
+		new Map([
+			['fartsgrense', undefined],
+			['ådt', undefined],
+			['andeltunge', undefined],
+			['trafikkvekst', undefined],
+		])
+	);
+	const oppdaterTrafikkData = useCallback(
+		(verdi: number, felt: Felt) => {
+			const nyState = new Map(trafikkData);
+			nyState.set(felt, verdi);
+			setTrafikkData(nyState);
+		},
+		[trafikkData]
+	);
 	return (
 		<>
 			<StyledContainer>
@@ -26,18 +43,7 @@ export const Grunnlag = () => {
 						<KnappKort icon={'PilNed'} title={'4-felt'} />
 					</Kjørefelt>
 					<TraffikdataTittel>Trafikkdata</TraffikdataTittel>
-					<TrafikkData
-						fartsgrense={{ endre: () => {} }}
-						ådt={{
-							endre: () => {},
-						}}
-						andelTunge={{
-							endre: () => {},
-						}}
-						trafikkvekst={{
-							endre: () => {},
-						}}
-					/>
+					<TrafikkData feltVerdier={trafikkData} oppdaterVerdi={oppdaterTrafikkData} />
 					<AkselKonfigurasjon />
 				</HøyreKolonne>
 				<Posisjon>

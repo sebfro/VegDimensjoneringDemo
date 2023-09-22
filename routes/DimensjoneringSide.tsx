@@ -50,17 +50,6 @@ export const DimensjoneringSide = () => {
 					icon={'Pluss'}
 					onClickCallback={leggTilDimensjonering}
 				/>
-				<button
-					onClick={() => {
-						const nyState = dimensjoneringer.slice();
-						const nyLagListe = Object.assign({}, nyState[0]);
-						nyLagListe.lagListe[0].materiale = 'Kult 22/90';
-						nyState[0] = nyLagListe;
-						setDimensjoneringer(nyState);
-					}}
-				>
-					Test
-				</button>
 			</DimensjoneringContainer>
 		</StyledContainer>
 	);

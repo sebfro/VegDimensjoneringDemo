@@ -5,33 +5,20 @@ import { FC } from 'react';
 import { LabelTekst } from '../../atoms/TekstKomponenter';
 import UnitInput from '../../atoms/Inputs/UnitInput';
 
-type InputFelt = {
-	value?: number;
-	endre: (value: number) => void;
-};
+export type Felt = 'fartsgrense' | 'ådt' | 'andeltunge' | 'trafikkvekst';
 
-interface TrafikkDataProps {
-	fartsgrense: InputFelt;
-	ådt: InputFelt;
-	andelTunge: InputFelt;
-	trafikkvekst: InputFelt;
+export interface TrafikkDataProps {
+	feltVerdier: Map<Felt, number | undefined>;
+	oppdaterVerdi: (verdi: number, felt: Felt) => void;
 }
-export const TrafikkData: FC<TrafikkDataProps> = ({
-	fartsgrense,
-	ådt,
-	andelTunge,
-	trafikkvekst,
-}) => {
-	const hentInputMedLabel = (
-		label: string,
-		enhet: 'tall' | 'prosent',
-		endre: (value: number) => void
-	) => {
+export const TrafikkData: FC<TrafikkDataProps> = ({ feltVerdier, oppdaterVerdi }) => {
+	const hentInputMedLabel = (label: string, enhet: 'tall' | 'prosent', felt: Felt) => {
 		return (
 			<TekstMedLabel>
 				<LabelTekst>{label}</LabelTekst>
 				<StyledUnitInput
-					onChangeCallback={(value) => endre(+value)}
+					value={feltVerdier.get(felt)?.toString()}
+					onChangeCallback={(value) => oppdaterVerdi(+value, felt)}
 					unit={enhet === 'tall' ? 'ingen' : 'prosent'}
 				/>
 			</TekstMedLabel>
@@ -40,10 +27,10 @@ export const TrafikkData: FC<TrafikkDataProps> = ({
 	return (
 		<GråKort>
 			<KortInnhold>
-				{hentInputMedLabel('Fartsgrense', 'tall', fartsgrense.endre)}
-				{hentInputMedLabel('ÅDT (åpningsår)', 'tall', ådt.endre)}
-				{hentInputMedLabel('Andel tunge', 'prosent', andelTunge.endre)}
-				{hentInputMedLabel('Trafikkvekst', 'prosent', trafikkvekst.endre)}
+				{hentInputMedLabel('Fartsgrense', 'tall', 'fartsgrense')}
+				{hentInputMedLabel('ÅDT (åpningsår)', 'tall', 'ådt')}
+				{hentInputMedLabel('Andel tunge', 'prosent', 'andeltunge')}
+				{hentInputMedLabel('Trafikkvekst', 'prosent', 'trafikkvekst')}
 			</KortInnhold>
 		</GråKort>
 	);
