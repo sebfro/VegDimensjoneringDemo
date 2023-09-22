@@ -8,11 +8,13 @@ import { HoverStyle } from '../StyledComponents/Common';
 import { formatNumber } from '../../../lib/Utils/formatHelpers';
 import { BodyLitenTekst } from '../TekstKomponenter.ts';
 
-export type Unit = 'millimeter' | 'meter';
+export type Unit = 'millimeter' | 'meter' | 'prosent' | 'ingen';
 
 const UnitTextMap = new Map<Unit, string>([
 	['millimeter', 'mm'],
 	['meter', 'meter'],
+	['prosent', '%'],
+	['ingen', ''],
 ]);
 
 interface UnitInputProps {
@@ -112,11 +114,28 @@ const InputWrapper = styled.div<{ unit: Unit; error: boolean }>`
 	padding: 12px 16px;
 	height: 48px;
 	display: flex;
-	column-gap: ${({ unit }) => (unit === 'millimeter' ? '0px' : '16px')};
+	// column-gap: ${({ unit }) => (unit === 'millimeter' ? '0px' : '16px')};
+	column-gap: ${({ unit }) => {
+		switch (unit) {
+			case 'meter':
+				return '16px';
+			default:
+				return '0';
+		}
+	}};
 	justify-content: space-between;
 	overflow: hidden;
 	align-items: center;
-	width: ${({ unit }) => (unit === 'millimeter' ? '150px' : '216px')};
+	width: ${({ unit }) => {
+		switch (unit) {
+			case 'millimeter':
+				return '150px';
+			case 'meter':
+				return '216px';
+			default:
+				return '100%';
+		}
+	}};
 
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
@@ -132,5 +151,5 @@ const InputWrapper = styled.div<{ unit: Unit; error: boolean }>`
 `;
 
 const StyledFocusOutline = styled(FocusOutline)`
-	width: min-content;
+	//width: min-content;
 `;

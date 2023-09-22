@@ -2,8 +2,8 @@ import styled, { css, CSSProperties } from 'styled-components';
 import { FC } from 'react';
 import { ArcherElement } from 'react-archer';
 import { Colors } from '../../styles/colors.ts';
-import { LagType, MaterialeType } from '../Eksperimenter/Dimejsonering.tsx';
 import { TextStyles } from '../../styles/TextStyles.ts';
+import { LagType, MaterialeType } from '../../lib/MidlertidigData/Dimensjonering.ts';
 
 interface LagProps {
 	lagListe: LagType[];

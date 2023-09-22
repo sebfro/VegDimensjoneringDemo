@@ -2,12 +2,12 @@ import styled from 'styled-components';
 import { Container } from '../styles/BasePageLayout';
 import { TittelLitenTekst, TittelStorTekst } from '../components/atoms/TekstKomponenter.ts';
 import Kort from '../components/atoms/Kort.tsx';
-import { Colors } from '../styles/colors.ts';
 import { Footer } from '../components/atoms/Knapper/Footer.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
 import KnappKort from '../components/atoms/Knapper/KnappKort.tsx';
 import { AkselKonfigurasjon } from '../components/domain/DimensjoneringsGrunnlag/AkselKonfigurasjon.tsx';
+import { TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
 
 export const Grunnlag = () => {
 	const navigation = useNavigate();
@@ -25,10 +25,19 @@ export const Grunnlag = () => {
 						<KnappKort icon={'PilNed'} title={'3-felt'} />
 						<KnappKort icon={'PilNed'} title={'4-felt'} />
 					</Kjørefelt>
-					<Traffikdata>Trafikkdata</Traffikdata>
-					<GråKort>
-						<p>Placeholder</p>
-					</GråKort>
+					<TraffikdataTittel>Trafikkdata</TraffikdataTittel>
+					<TrafikkData
+						fartsgrense={{ endre: () => {} }}
+						ådt={{
+							endre: () => {},
+						}}
+						andelTunge={{
+							endre: () => {},
+						}}
+						trafikkvekst={{
+							endre: () => {},
+						}}
+					/>
 					<AkselKonfigurasjon />
 				</HøyreKolonne>
 				<Posisjon>
@@ -69,18 +78,12 @@ const PosisjonInnehold = styled.div`
 	display: grid;
 `;
 
-const GråKort = styled(Kort)`
-	background-color: ${Colors.lysGrå};
-	border-radius: 0;
-	margin-bottom: 2.125rem;
-`;
-
 const Kjørefelt = styled.div`
 	display: flex;
 	column-gap: 1.5rem;
 	margin-top: 1.5rem;
 `;
 
-const Traffikdata = styled(TittelLitenTekst)`
+const TraffikdataTittel = styled(TittelLitenTekst)`
 	margin: 4rem 0 1.5rem;
 `;

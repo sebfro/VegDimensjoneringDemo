@@ -5,71 +5,29 @@ import UnitInput from '../atoms/Inputs/UnitInput.tsx';
 import { ArcherContainer, ArcherElement } from 'react-archer';
 import { Colors } from '../../styles/colors.ts';
 import { DimensjoneringsLag } from '../atoms/DimensjoneringsLag.tsx';
-import { useCallback, useState } from 'react';
+import { FC, useCallback } from 'react';
 import { TextStyles } from '../../styles/TextStyles.ts';
 import Kort from '../atoms/Kort.tsx';
-import { Container } from '../../styles/BasePageLayout.ts';
+import {
+	LagType,
+	LagTyperFargeMap,
+	MaterialeListe,
+	MaterialeType,
+} from '../../lib/MidlertidigData/Dimensjonering.ts';
 
-export type LagType = {
-	høyde: number;
-	color: CSSProperties['color'];
-	materiale: MaterialeType;
-	aktiv: boolean;
-	navn: string;
-};
+export interface DimensjoneringProps {
+	lagListe: LagType[];
+	oppdaterLagListe: (lagListe: LagType[]) => void;
+}
 
-export type MaterialeType =
-	| 'Ab 16-70/100'
-	| 'Ab 11 - PMP'
-	| 'Ag 16-160/220'
-	| 'Fk 0/32'
-	| 'Kult 22/90';
-
-export const Dimejsonering = () => {
-	const [lagListe, setLagListe] = useState<LagType[]>([
-		{
-			høyde: 45,
-			color: 'red',
-			materiale: 'Ab 11 - PMP',
-			aktiv: true,
-			navn: 'Slitelag',
-		},
-		{ høyde: 45, color: 'aqua', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Bindelag' },
-		{ høyde: 100, color: 'pink', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Øvre bærelag' },
-		{ høyde: 50, color: 'yellow', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Nedre bærelag' },
-		{
-			høyde: 120,
-			color: 'black',
-			materiale: 'Kult 22/90',
-			aktiv: true,
-			navn: 'Forsterkningslag',
-		},
-		{
-			høyde: 50,
-			color: 'yellow',
-			materiale: 'Ab 16-70/100',
-			aktiv: false,
-			navn: 'Frostsikringslag',
-		},
-		{ høyde: 50, color: 'yellow', materiale: 'Ab 16-70/100', aktiv: false, navn: 'Fiberduk' },
-	]);
-	const fargeMap: Map<MaterialeType, CSSProperties['color']> = new Map([
-		['Ab 16-70/100', 'black'],
-		['Ab 11 - PMP', '#444F55'],
-		['Ag 16-160/220', '#ECECEC'],
-		['Fk 0/32', 'yellow'],
-		['Kult 22/90', 'pink'],
-	]);
-
-	const MaterialeListe = ['Ab 16-70/100', 'Ab 11 - PMP', 'Ag 16-160/220', 'Fk 0/32', 'Kult 22/90'];
-
+export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagListe }) => {
 	const handleEndreTykkelse = useCallback(
 		(value: string, index: number) => {
-			const tempLagLsite = [...lagListe];
+			const tempLagLsite = lagListe.slice();
 			tempLagLsite[index].høyde = +value;
-			setLagListe(tempLagLsite);
+			oppdaterLagListe(tempLagLsite);
 		},
-		[lagListe]
+		[lagListe, oppdaterLagListe]
 	);
 
 	const genererInputFelt = () => {
@@ -107,11 +65,11 @@ export const Dimejsonering = () => {
 
 	const handleEndreMateriale = useCallback(
 		(value: string, index: number) => {
-			const tempLagLsite = [...lagListe];
+			const tempLagLsite = lagListe.slice();
 			tempLagLsite[index].materiale = value as MaterialeType;
-			setLagListe(tempLagLsite);
+			oppdaterLagListe(tempLagLsite);
 		},
-		[lagListe]
+		[lagListe, oppdaterLagListe]
 	);
 
 	const genererDropdown = () => {
@@ -132,53 +90,52 @@ export const Dimejsonering = () => {
 		(index: number) => {
 			const tempLagLsite = [...lagListe];
 			tempLagLsite[index].aktiv = !tempLagLsite[index].aktiv;
-			setLagListe(tempLagLsite);
+			oppdaterLagListe(tempLagLsite);
 		},
-		[lagListe]
+		[lagListe, oppdaterLagListe]
 	);
 
 	return (
-		<Container>
-			<StyledKort>
-				<CheckboxKolonne>
-					<HeaderOne>Lag</HeaderOne>
-					<CheckboxContainer>
-						{lagListe.map((checkBox, index) => (
-							<CheckBox
-								handleOnClick={() => handleToggleCheckbox(index)}
-								buttonLabel={checkBox.navn}
-								key={index}
-								selected={checkBox.aktiv}
-							/>
-						))}
-					</CheckboxContainer>
-				</CheckboxKolonne>
-				<ArcherContainer strokeColor={Colors.grå}>
-					<BæreEvneGruppe>
-						<HeaderOne>Materiale</HeaderOne>
-						<InputKolonne>{genererDropdown()}</InputKolonne>
-						<HeaderOne>Tykkelse</HeaderOne>
-						<InputKolonne>{genererInputFelt()}</InputKolonne>
-						<LagContainer>
-							<Lagene>
-								<LinjeWrapper>
-									<Linje />
-									<p>0</p>
-								</LinjeWrapper>
-								<DimensjoneringsLag fargeMap={fargeMap} lagListe={lagListe} />
-							</Lagene>
-						</LagContainer>
-						<Målestokk></Målestokk>
-					</BæreEvneGruppe>
-				</ArcherContainer>
-			</StyledKort>
-		</Container>
+		<StyledKort>
+			<CheckboxKolonne>
+				<HeaderOne>Lag</HeaderOne>
+				<CheckboxContainer>
+					{lagListe.map((checkBox, index) => (
+						<CheckBox
+							handleOnClick={() => handleToggleCheckbox(index)}
+							buttonLabel={checkBox.navn}
+							key={index}
+							selected={checkBox.aktiv}
+						/>
+					))}
+				</CheckboxContainer>
+			</CheckboxKolonne>
+			<ArcherContainer strokeColor={Colors.grå}>
+				<BæreEvneGruppe>
+					<HeaderOne>Materiale</HeaderOne>
+					<InputKolonne>{genererDropdown()}</InputKolonne>
+					<HeaderOne>Tykkelse</HeaderOne>
+					<InputKolonne>{genererInputFelt()}</InputKolonne>
+					<LagContainer>
+						<Lagene>
+							<LinjeWrapper>
+								<Linje />
+								<p>0</p>
+							</LinjeWrapper>
+							<DimensjoneringsLag fargeMap={LagTyperFargeMap} lagListe={lagListe} />
+						</Lagene>
+					</LagContainer>
+					<Målestokk></Målestokk>
+				</BæreEvneGruppe>
+			</ArcherContainer>
+		</StyledKort>
 	);
 };
 
 const StyledKort = styled(Kort)`
 	display: grid;
 	grid-template-columns: 1fr 3fr;
+	height: min-content;
 `;
 
 const CheckboxKolonne = styled.div`

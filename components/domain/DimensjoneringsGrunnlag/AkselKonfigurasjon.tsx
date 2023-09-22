@@ -76,4 +76,5 @@ const Detaljer = styled.div`
 	flex-wrap: wrap;
 	column-gap: 2.5rem;
 	row-gap: 1rem;
+	max-width: 40rem;
 `;

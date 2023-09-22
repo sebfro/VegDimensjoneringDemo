@@ -11,10 +11,10 @@ import { Urls } from '../lib/Urls.ts';
 import ErrorPage from '../routes/ErrorPage.tsx';
 import Page from '../components/atoms/Page.tsx';
 import Backoffice from '../routes/Backoffice/Backoffice.tsx';
-import { Dimejsonering } from '../components/Eksperimenter/Dimejsonering.tsx';
 import { Startside } from '../routes/Startside.tsx';
 import { Posisjon } from '../routes/Posisjon.tsx';
 import { Grunnlag } from '../routes/Grunnlag.tsx';
+import { DimensjoneringSide } from '../routes/DimensjoneringSide.tsx';
 
 // Tutorial jeg brukte: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_container_queries
 const router = createBrowserRouter(
@@ -45,7 +45,7 @@ const router = createBrowserRouter(
 				path={Urls.dimensjonering}
 				element={
 					<Page tittel={'Dimensjonering'}>
-						<Dimejsonering />
+						<DimensjoneringSide />
 					</Page>
 				}
 			/>
