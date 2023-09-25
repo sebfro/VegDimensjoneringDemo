@@ -35,7 +35,7 @@ export const DimensjoneringsLag: FC<LagProps> = ({ lagListe, fargeMap }) => {
 							color={fargeMap.get(lag.materiale) || 'black'}
 							key={index}
 							indent={maksIndex - index * indent}
-						></Rektangel>
+						/>
 						<Tick columnGap={index === antallLag - 1 ? '14px' : '24px'}>
 							<Linje bredde={index === antallLag - 1 ? '1rem' : '0.5rem'} />
 							<p>{accHøyde}</p>
@@ -54,7 +54,6 @@ const Rektangel = styled.div<{ høyde: number; indent: number; color: CSSPropert
 	background-color: ${(props) => props.color};
 	border-top-right-radius: 5px;
 	border: 1px solid ${Colors.lysGrå};
-	//fill: lightgray 50% / cover no-repeat;
 `;
 
 const Tick = styled.div<{ columnGap: CSSProperties['columnGap'] }>`

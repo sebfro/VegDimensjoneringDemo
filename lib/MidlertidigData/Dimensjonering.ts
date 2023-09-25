@@ -13,7 +13,7 @@ export type LagType = {
 	color: CSSProperties['color'];
 	materiale: MaterialeType;
 	aktiv: boolean;
-	navn: string;
+	navn: LagNavn;
 };
 
 export const LagTyperFargeMap: Map<MaterialeType, CSSProperties['color']> = new Map([
@@ -32,6 +32,15 @@ export const MaterialeListe = [
 	'Kult 22/90',
 ];
 
+export type LagNavn =
+	| 'Bindelag'
+	| 'Bærelag'
+	| 'Øvre + nedre'
+	| 'Slitelag'
+	| 'Forsterkningslag'
+	| 'Frostsikringslag'
+	| 'Fiberduk';
+
 export const DimensjoneringInitialState: Pick<DimensjoneringProps, 'lagListe'> = {
 	lagListe: [
 		{
@@ -42,8 +51,8 @@ export const DimensjoneringInitialState: Pick<DimensjoneringProps, 'lagListe'> =
 			navn: 'Slitelag',
 		},
 		{ høyde: 45, color: 'aqua', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Bindelag' },
-		{ høyde: 100, color: 'pink', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Øvre bærelag' },
-		{ høyde: 50, color: 'yellow', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Nedre bærelag' },
+		{ høyde: 100, color: 'pink', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Bærelag' },
+		{ høyde: 50, color: 'yellow', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Øvre + nedre' },
 		{
 			høyde: 120,
 			color: 'black',

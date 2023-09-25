@@ -3,40 +3,21 @@ import styled, { css } from 'styled-components';
 
 import { Colors } from '../../../styles/colors';
 import { TextStyles } from '../../../styles/TextStyles';
-import { HoverStyle } from '../StyledComponents/Common';
 import { formatNumber } from '../../../lib/Utils/formatHelpers';
 import { BodyLitenTekst } from '../TekstKomponenter.ts';
-
-export type Unit = 'millimeter' | 'meter' | 'prosent' | 'ingen';
-
-const UnitTextMap = new Map<Unit, string>([
-	['millimeter', 'mm'],
-	['meter', 'meter'],
-	['prosent', '%'],
-	['ingen', ''],
-]);
 
 interface UnitInputProps {
 	onChangeCallback: (value: string) => void;
 	className?: string;
-	unit?: Unit;
 	value?: string;
 	disabled?: boolean;
 	placeholder?: string;
 	error?: boolean;
 }
 
-const UnitInput: React.FC<UnitInputProps> = forwardRef<Ref<HTMLDivElement>, UnitInputProps>(
+const MilimeterInput: React.FC<UnitInputProps> = forwardRef<Ref<HTMLDivElement>, UnitInputProps>(
 	(
-		{
-			onChangeCallback,
-			className,
-			unit = 'millimeter',
-			value = '',
-			disabled = false,
-			placeholder = '',
-			error = false,
-		},
+		{ onChangeCallback, className, value = '', disabled = false, placeholder = '', error = false },
 		ref
 	) => {
 		const handleOnChange = useCallback(
@@ -56,7 +37,6 @@ const UnitInput: React.FC<UnitInputProps> = forwardRef<Ref<HTMLDivElement>, Unit
 
 		return (
 			<InputWrapper
-				unit={unit}
 				className={className}
 				error={error}
 				ref={ref as React.RefObject<HTMLDivElement>}
@@ -70,21 +50,20 @@ const UnitInput: React.FC<UnitInputProps> = forwardRef<Ref<HTMLDivElement>, Unit
 					value={formattedValue || ''}
 					placeholder={placeholder}
 					onChange={handleOnChange}
-					unit={unit}
 					className='no-spinner'
 					ref={inputRef}
 				/>
-				<BodyLitenTekst>{UnitTextMap.get(unit)}</BodyLitenTekst>
+				<BodyLitenTekst>mm</BodyLitenTekst>
 			</InputWrapper>
 		);
 	}
 );
 
-UnitInput.displayName = 'UnitInput';
+MilimeterInput.displayName = 'UnitInput';
 
-export default UnitInput;
+export default MilimeterInput;
 
-export const StyledInput = styled.input<{ placeholderStyle: boolean; unit: Unit }>`
+export const StyledInput = styled.input<{ placeholderStyle: boolean }>`
 	color: ${Colors.mørkSort};
 	${({ placeholderStyle }) =>
 		placeholderStyle
@@ -102,38 +81,17 @@ export const StyledInput = styled.input<{ placeholderStyle: boolean; unit: Unit 
 	height: 26px;
 `;
 
-const InputWrapper = styled.div<{ unit: Unit; error: boolean }>`
+const InputWrapper = styled.div<{ error: boolean }>`
 	${TextStyles.BodyMedium};
-	border: 2px solid ${Colors.sort};
-	${HoverStyle};
+	padding: 0.75rem 0.5rem;
+	height: 3rem;
+	box-sizing: border-box;
 	color: ${Colors.mørkSort};
 	background-color: white;
-	padding: 12px 16px;
-	height: 48px;
 	display: flex;
-	// column-gap: ${({ unit }) => (unit === 'millimeter' ? '0px' : '16px')};
-	column-gap: ${({ unit }) => {
-		switch (unit) {
-			case 'meter':
-				return '16px';
-			default:
-				return '0';
-		}
-	}};
 	justify-content: space-between;
 	overflow: hidden;
 	align-items: center;
-	width: ${({ unit }) => {
-		switch (unit) {
-			case 'millimeter':
-				return '150px';
-			case 'meter':
-				return '216px';
-			default:
-				return '100%';
-		}
-	}};
-
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;

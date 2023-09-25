@@ -1,8 +1,5 @@
 import styled, { CSSProperties } from 'styled-components';
-import CheckBox from '../atoms/Inputs/CheckBox.tsx';
-import Dropdown from '../atoms/Inputs/Dropdown.tsx';
-import UnitInput from '../atoms/Inputs/UnitInput.tsx';
-import { ArcherContainer, ArcherElement } from 'react-archer';
+import { ArcherContainer } from 'react-archer';
 import { Colors } from '../../styles/colors.ts';
 import { DimensjoneringsLag } from '../atoms/DimensjoneringsLag.tsx';
 import { FC, useCallback } from 'react';
@@ -11,9 +8,9 @@ import Kort from '../atoms/Kort.tsx';
 import {
 	LagType,
 	LagTyperFargeMap,
-	MaterialeListe,
 	MaterialeType,
 } from '../../lib/MidlertidigData/Dimensjonering.ts';
+import BæreEvne from '../domain/Overbygning/BæreEvne.tsx';
 
 export interface DimensjoneringProps {
 	lagListe: LagType[];
@@ -30,39 +27,6 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagL
 		[lagListe, oppdaterLagListe]
 	);
 
-	const genererInputFelt = () => {
-		return lagListe.map((lag, index) => {
-			if (!lag.aktiv) return;
-			return (
-				<ArcherElement
-					id={'unitInput' + index}
-					key={index}
-					relations={[
-						{
-							targetId: 'rektangel' + index,
-							targetAnchor: 'left',
-							sourceAnchor: 'right',
-							style: {
-								lineStyle: 'curve',
-								endShape: {
-									arrow: {
-										arrowLength: 0,
-										arrowThickness: 0,
-									},
-								},
-							},
-						},
-					]}
-				>
-					<UnitInput
-						onChangeCallback={(value) => handleEndreTykkelse(value, index)}
-						value={lagListe[index].høyde.toString()}
-					/>
-				</ArcherElement>
-			);
-		});
-	};
-
 	const handleEndreMateriale = useCallback(
 		(value: string, index: number) => {
 			const tempLagLsite = lagListe.slice();
@@ -71,20 +35,6 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagL
 		},
 		[lagListe, oppdaterLagListe]
 	);
-
-	const genererDropdown = () => {
-		return lagListe.map((lag, index) => {
-			if (!lag.aktiv) return;
-			return (
-				<Dropdown
-					key={index}
-					options={MaterialeListe}
-					value={lagListe[index].materiale}
-					handleOnChange={(value) => handleEndreMateriale(value, index)}
-				/>
-			);
-		});
-	};
 
 	const handleToggleCheckbox = useCallback(
 		(index: number) => {
@@ -97,25 +47,16 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagL
 
 	return (
 		<StyledKort>
-			<CheckboxKolonne>
-				<HeaderOne>Lag</HeaderOne>
-				<CheckboxContainer>
-					{lagListe.map((checkBox, index) => (
-						<CheckBox
-							handleOnClick={() => handleToggleCheckbox(index)}
-							buttonLabel={checkBox.navn}
-							key={index}
-							selected={checkBox.aktiv}
-						/>
-					))}
-				</CheckboxContainer>
-			</CheckboxKolonne>
 			<ArcherContainer strokeColor={Colors.grå}>
-				<BæreEvneGruppe>
-					<HeaderOne>Materiale</HeaderOne>
-					<InputKolonne>{genererDropdown()}</InputKolonne>
-					<HeaderOne>Tykkelse</HeaderOne>
-					<InputKolonne>{genererInputFelt()}</InputKolonne>
+				<KortInnhold>
+					<BæreEvne
+						lagListe={lagListe}
+						handlers={{
+							handleEndreTykkelse,
+							handleToggleCheckbox,
+							handleEndreMateriale,
+						}}
+					/>
 					<LagContainer>
 						<Lagene>
 							<LinjeWrapper>
@@ -125,53 +66,22 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagL
 							<DimensjoneringsLag fargeMap={LagTyperFargeMap} lagListe={lagListe} />
 						</Lagene>
 					</LagContainer>
-					<Målestokk></Målestokk>
-				</BæreEvneGruppe>
+					<Målestokk />
+				</KortInnhold>
 			</ArcherContainer>
 		</StyledKort>
 	);
 };
 
-const StyledKort = styled(Kort)`
-	display: grid;
-	grid-template-columns: 1fr 3fr;
-	height: min-content;
-`;
-
-const CheckboxKolonne = styled.div`
-	height: 100%;
-	display: grid;
-	justify-content: start;
-	flex-direction: column;
-	grid-template-rows: 82px auto;
-
-	input {
-		width: fit-content;
-	}
-`;
-
-const CheckboxContainer = styled.div`
-	display: grid;
-	row-gap: 1.5rem;
-	grid-template-rows: repeat(auto-fit, 32px);
-`;
-
-const BæreEvneGruppe = styled.div`
-	height: 100%;
+const KortInnhold = styled.div`
 	width: 100%;
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr 1.5fr;
-	grid-template-areas:
-		'materiale tykkelse . . .'
-		'materialeInput tykkelseInput linjer lag målestokk';
-	grid-auto-flow: column;
-	column-gap: 1rem;
-	padding-right: 3rem;
-	grid-template-rows: 82px auto;
+	grid-template-columns: 3fr 1fr 1fr 3rem;
+`;
 
-	h1 {
-		align-self: center;
-	}
+const StyledKort = styled(Kort)`
+	height: min-content;
+	width: 100%;
 `;
 
 const Lagene = styled.div`
@@ -181,19 +91,11 @@ const Lagene = styled.div`
 `;
 
 const LagContainer = styled.div`
-	grid-row: 2;
-	grid-column: 4;
+	grid-column: 3;
 `;
 
 const Målestokk = styled.div`
-	grid-row: 2;
-	grid-column: 5;
-`;
-
-const InputKolonne = styled.div`
-	display: grid;
-	align-content: start;
-	row-gap: 1rem;
+	grid-column: 4;
 `;
 
 const Linje = styled.div<{ bredde?: CSSProperties['width'] }>`
@@ -216,11 +118,4 @@ const LinjeWrapper = styled.div`
 		${TextStyles.BodyLiten};
 		font-weight: 300;
 	}
-`;
-
-const HeaderOne = styled.h1`
-	${TextStyles.BodyLiten};
-	font-weight: 600;
-	align-self: center;
-	color: ${Colors.primaryTekst};
 `;
