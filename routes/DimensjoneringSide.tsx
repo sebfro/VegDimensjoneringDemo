@@ -8,6 +8,7 @@ import { LeggTilKnapp } from '../components/atoms/Knapper/LeggTilKnapp.tsx';
 import { useCallback, useState } from 'react';
 import { LagType, DimensjoneringInitialState } from '../lib/MidlertidigData/Dimensjonering.ts';
 import { cloneDeep } from 'lodash';
+import { Footer } from '../components/atoms/Footer.tsx';
 
 export const DimensjoneringSide = () => {
 	const [dimensjoneringer, setDimensjoneringer] = useState<Pick<DimensjoneringProps, 'lagListe'>[]>(
@@ -51,6 +52,7 @@ export const DimensjoneringSide = () => {
 					onClickCallback={leggTilDimensjonering}
 				/>
 			</DimensjoneringContainer>
+			<Footer />
 		</StyledContainer>
 	);
 };

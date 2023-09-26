@@ -10,11 +10,11 @@ import {
 import React from 'react';
 import IkonKnapp from '../../atoms/Knapper/IkonKnapp.tsx';
 
-type dataType = 'km/t' | 'm' | 'felt' | 'prosent' | 'ingen' | 'm/s' | 'celsius';
+type dataType = 'km/t' | 'm' | 'felt' | '%' | 'ingen' | 'm/s' | 'celsius';
 
 export const Sidebar = () => {
 	const genererFelt = (verdi: string, type: dataType, label: string) => {
-		let datatype: string | React.ReactElement = type.toString();
+		let datatype: string | React.ReactElement = ' ' + type.toString();
 		if (type === 'celsius') datatype = <span>&#xb0;</span>;
 		if (type === 'ingen') datatype = '';
 		return (
@@ -24,7 +24,8 @@ export const Sidebar = () => {
 					<LabelTekst>{label}</LabelTekst>
 				</TekstMedIkon>
 				<BodyLitenTekst>
-					{verdi} {datatype}
+					{verdi}
+					{datatype}
 				</BodyLitenTekst>
 			</InfoFelt>
 		);
@@ -57,8 +58,8 @@ export const Sidebar = () => {
 					{genererFelt('3.25', 'm', 'kjørefeltbredde')}
 					{genererFelt('90', 'km/t', 'Fartsgrense')}
 					{genererFelt('14052', 'ingen', 'Ådt per felt')}
-					{genererFelt('4', 'prosent', 'Andel tunge')}
-					{genererFelt('6', 'prosent', 'Trafikkvekst')}
+					{genererFelt('4', '%', 'Andel tunge')}
+					{genererFelt('6', '%', 'Trafikkvekst')}
 				</Liste>
 			</TrafikkdataSeksjon>
 			<GråLinje />

@@ -12,7 +12,7 @@ interface LagProps {
 
 export const DimensjoneringsLag: FC<LagProps> = ({ lagListe, fargeMap }) => {
 	const mmIPiksler =
-		500 /
+		336 /
 		lagListe.reduce((acc, lag) => {
 			return acc + lag.høyde;
 		}, 0);
@@ -22,28 +22,26 @@ export const DimensjoneringsLag: FC<LagProps> = ({ lagListe, fargeMap }) => {
 	const antallLag = lagListe.reduce((acc, lag) => {
 		return lag.aktiv ? acc + 1 : acc;
 	}, 0);
-	return lagListe
-		.filter((lag) => lag.aktiv)
-		.map((lag, index) => {
-			if (!lag.aktiv) return;
-			accHøyde += lag.høyde;
-			return (
-				<ArcherElement id={'rektangel' + index} key={index}>
-					<Rad>
-						<Rektangel
-							høyde={lag.høyde * mmIPiksler}
-							color={fargeMap.get(lag.materiale) || 'black'}
-							key={index}
-							indent={maksIndex - index * indent}
-						/>
-						<Tick columnGap={index === antallLag - 1 ? '14px' : '24px'}>
-							<Linje bredde={index === antallLag - 1 ? '1rem' : '0.5rem'} />
-							<p>{accHøyde}</p>
-						</Tick>
-					</Rad>
-				</ArcherElement>
-			);
-		});
+	return lagListe.map((lag, index) => {
+		if (!lag.aktiv) return;
+		accHøyde += lag.høyde;
+		return (
+			<ArcherElement id={'rektangel' + index} key={index}>
+				<Rad>
+					<Rektangel
+						høyde={lag.høyde * mmIPiksler}
+						color={fargeMap.get(lag.materiale) || 'black'}
+						key={index}
+						indent={maksIndex - index * indent}
+					/>
+					<Tick columnGap={index === antallLag - 1 ? '14px' : '24px'}>
+						<Linje bredde={index === antallLag - 1 ? '1rem' : '0.5rem'} />
+						<p>{accHøyde}</p>
+					</Tick>
+				</Rad>
+			</ArcherElement>
+		);
+	});
 };
 
 const Rektangel = styled.div<{ høyde: number; indent: number; color: CSSProperties['color'] }>`

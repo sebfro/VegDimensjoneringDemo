@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { TextStyles } from '../../../styles/TextStyles.ts';
 import { Colors } from '../../../styles/colors.ts';
-import { ButtonFocusStyle, HoverStyle } from '../StyledComponents/Common.ts';
+import { HoverStyle } from '../StyledComponents/Common.ts';
 
 export const CommonInputStyling = css`
 	${TextStyles.BodyMedium};
@@ -21,12 +21,9 @@ export const SelectStyling = css`
 	select {
 		${TextStyles.BodyMedium};
 		width: 100%;
-		border: 2px solid #97989b;
 		height: 48px;
 		background-color: white;
 		color: ${Colors.mørkSort};
-		${ButtonFocusStyle};
-		${HoverStyle};
 		padding: 0 0 0 16px;
 
 		:hover {
@@ -40,6 +37,7 @@ export const SelectWrapper = styled.div<{ placeholderSelected: boolean; error?: 
 		color: #97989b;
 		${TextStyles.LabelType};
 	}
+	height: 100%;
 
 	${SelectStyling};
 

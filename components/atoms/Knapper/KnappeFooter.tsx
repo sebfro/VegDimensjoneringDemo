@@ -16,7 +16,7 @@ type FooterProps = {
 	loading?: boolean;
 };
 
-export const Footer: FC<FooterProps> = ({
+export const KnappeFooter: FC<FooterProps> = ({
 	className,
 	kanppProps: {
 		avbrytTekst = 'Avbryt',

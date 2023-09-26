@@ -11,6 +11,8 @@ import {
 	MaterialeType,
 } from '../../lib/MidlertidigData/Dimensjonering.ts';
 import BæreEvne from '../domain/Overbygning/BæreEvne.tsx';
+import { BodyLitenTekst, TittelMediumTekst } from '../atoms/TekstKomponenter.ts';
+import IkonKnapp from '../atoms/Knapper/IkonKnapp.tsx';
 
 export interface DimensjoneringProps {
 	lagListe: LagType[];
@@ -48,6 +50,17 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagL
 	return (
 		<StyledKort>
 			<ArcherContainer strokeColor={Colors.grå}>
+				<KortHeader>
+					<TitteOgRedigerKnapp>
+						<TittelMediumTekst>Hovedveg 1 </TittelMediumTekst>
+						<IkonKnapp ikon='Rediger' iconSize={2.5} />
+					</TitteOgRedigerKnapp>
+					<StyledBodyLitenTekst>Silt, leire, T4, CU? 50 kPa</StyledBodyLitenTekst>
+					<Grupper>
+						<BodyLitenTekst>Bæreevnegruppe 3</BodyLitenTekst>
+						<BodyLitenTekst>Trafikkgruppe A</BodyLitenTekst>
+					</Grupper>
+				</KortHeader>
 				<KortInnhold>
 					<BæreEvne
 						lagListe={lagListe}
@@ -92,6 +105,7 @@ const Lagene = styled.div`
 
 const LagContainer = styled.div`
 	grid-column: 3;
+	margin-top: 2.5rem;
 `;
 
 const Målestokk = styled.div`
@@ -118,4 +132,26 @@ const LinjeWrapper = styled.div`
 		${TextStyles.BodyLiten};
 		font-weight: 300;
 	}
+`;
+
+const KortHeader = styled.div`
+	display: flex;
+	margin-bottom: 1.5rem;
+	align-items: center;
+`;
+
+const TitteOgRedigerKnapp = styled.div`
+	align-items: center;
+	display: flex;
+	column-gap: 1.5rem;
+	margin-right: 2rem;
+`;
+
+const StyledBodyLitenTekst = styled(BodyLitenTekst)`
+	margin-right: 2rem;
+`;
+
+const Grupper = styled.div`
+	display: flex;
+	column-gap: 1rem;
 `;

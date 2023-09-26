@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components';
 
 import SvgGetter from '../SVG/SvgGetter/SvgGetter';
 import { DropdownArrowContainer, SelectWrapper, StyledOption } from './InputStyling';
-import FocusOutline from '../StyledComponents/FocusOutline';
 import { TextStyles } from '../../../styles/TextStyles.ts';
+import { Colors } from '../../../styles/colors.ts';
 
 export interface DropdownProps {
 	options: string[];
@@ -36,24 +36,22 @@ const Dropdown: React.FC<DropdownProps> = ({
 	return (
 		<SelectWrapper className={className} placeholderSelected={value === ''}>
 			<SelectContaienr selectIsOpen={isOpen}>
-				<FocusOutline>
-					<select
-						onClick={() => setIsOpen(!isOpen)}
-						onBlur={() => setIsOpen(false)}
-						onKeyDown={handleKeyDown}
-						value={value}
-						onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleOnChange(e.target.value)}
-					>
-						<StyledOption className='default' value='' disabled={disablePlaceholder}>
-							{placeholder}
+				<select
+					onClick={() => setIsOpen(!isOpen)}
+					onBlur={() => setIsOpen(false)}
+					onKeyDown={handleKeyDown}
+					value={value}
+					onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleOnChange(e.target.value)}
+				>
+					<StyledOption className='default' value='' disabled={disablePlaceholder}>
+						{placeholder}
+					</StyledOption>
+					{options.map((o, i) => (
+						<StyledOption value={o} key={o + i.toString()}>
+							{o.charAt(0) + o.slice(1).toLowerCase()}
 						</StyledOption>
-						{options.map((o, i) => (
-							<StyledOption value={o} key={o + i.toString()}>
-								{o.charAt(0) + o.slice(1).toLowerCase()}
-							</StyledOption>
-						))}
-					</select>
-				</FocusOutline>
+					))}
+				</select>
 				<DropdownArrowContainer>
 					<SvgGetter icon={'PilNed'} />
 				</DropdownArrowContainer>
@@ -66,6 +64,11 @@ export default Dropdown;
 
 const SelectContaienr = styled.div<{ selectIsOpen: boolean }>`
 	position: relative;
+
+	:focus-within {
+		outline: 2px solid ${Colors.oransje};
+	}
+
 	${({ selectIsOpen }) =>
 		selectIsOpen &&
 		css`

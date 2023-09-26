@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Container } from '../styles/BasePageLayout';
 import { TittelLitenTekst, TittelStorTekst } from '../components/atoms/TekstKomponenter.ts';
 import Kort from '../components/atoms/Kort.tsx';
-import { Footer } from '../components/atoms/Knapper/Footer.tsx';
+import { KnappeFooter } from '../components/atoms/Knapper/KnappeFooter.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
 import KnappKort from '../components/atoms/Knapper/KnappKort.tsx';
@@ -50,7 +50,7 @@ export const Grunnlag = () => {
 					<PosisjonInnehold></PosisjonInnehold>
 				</Posisjon>
 			</StyledContainer>
-			<Footer
+			<KnappeFooter
 				kanppProps={{
 					avbrytOnClick: () => navigation(Urls.posisjon),
 					bekreftOnClick: () => navigation(Urls.dimensjonering),

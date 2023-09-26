@@ -105,8 +105,8 @@ const CustomSpan = styled.div`
 	}
 
 	border-radius: 0;
-	height: 32px;
-	width: 32px;
+	height: 1.5rem;
+	width: 1.5rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
