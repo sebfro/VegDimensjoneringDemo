@@ -30,6 +30,19 @@ export const DimensjoneringSide = () => {
 		setDimensjoneringer([...dimensjoneringer, cloneDeep(DimensjoneringInitialState)]);
 	}, [dimensjoneringer]);
 
+	// Alle dimensjonering skal være realtive til den søtrste/tjukkeste.
+	const kalkulererMmIPiksler = useCallback(() => {
+		let tjukkeste = 0;
+		dimensjoneringer.forEach((dim) => {
+			const dimTykkelse = dim.lagListe.reduce(
+				(acc, curr) => (curr.aktiv ? acc + curr.høyde : acc),
+				0
+			);
+			if (dimTykkelse > tjukkeste) tjukkeste = dimTykkelse;
+		});
+		return 336 / tjukkeste;
+	}, [dimensjoneringer]);
+
 	return (
 		<StyledContainer>
 			<Sidebar />
@@ -42,6 +55,7 @@ export const DimensjoneringSide = () => {
 								oppdaterLagListe(lagListe, i);
 							}}
 							lagListe={dim.lagListe}
+							mmIPiksler={kalkulererMmIPiksler()}
 						/>
 					);
 				})}

@@ -9,16 +9,25 @@ interface LagBoksProps {
 	index: number;
 	handleToggleCheckbox: (index: number) => void;
 	borderTop: boolean;
+	gjem: boolean;
 }
 
-export const LagBoks: FC<LagBoksProps> = ({ lag, index, handleToggleCheckbox, borderTop }) => {
+export const LagBoks: FC<LagBoksProps> = ({
+	lag,
+	index,
+	handleToggleCheckbox,
+	borderTop,
+	gjem,
+}) => {
 	return (
 		<Container borderTop={borderTop} borderBottom={lag.navn !== 'Bærelag'}>
-			<Checkbox
-				handleOnClick={() => handleToggleCheckbox(index)}
-				selected={lag.aktiv}
-				buttonLabel={lag.navn}
-			/>
+			{!gjem && (
+				<Checkbox
+					handleOnClick={() => handleToggleCheckbox(index)}
+					selected={lag.aktiv}
+					buttonLabel={lag.navn}
+				/>
+			)}
 		</Container>
 	);
 };

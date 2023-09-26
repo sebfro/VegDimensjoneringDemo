@@ -20,19 +20,10 @@ const BæreEvne: FC<BæreEvneProps> = forwardRef<Ref<HTMLDivElement>, BæreEvneP
 		{ lagListe, handlers: { handleEndreTykkelse, handleToggleCheckbox, handleEndreMateriale } },
 		ref
 	) => {
-		const genererInputFelt = (lag: LagType, borderTop: boolean, index: number) => {
-			// if (!lag.aktiv) return;
-			return (
-				<TykkelseBoks
-					lag={lag}
-					index={index}
-					borderTop={borderTop}
-					handleEndreTykkelse={handleEndreTykkelse}
-				/>
-			);
-		};
 		const genererRader = () => {
+			let bæreLagAktiv = true;
 			return lagListe.map((lag, index) => {
+				if (lag.navn === 'Bærelag') bæreLagAktiv = lag.aktiv;
 				const borderTop = index === 0;
 				return (
 					<Rad key={index} ref={ref as React.RefObject<HTMLDivElement>}>
@@ -41,6 +32,7 @@ const BæreEvne: FC<BæreEvneProps> = forwardRef<Ref<HTMLDivElement>, BæreEvneP
 							index={index}
 							handleToggleCheckbox={handleToggleCheckbox}
 							borderTop={borderTop}
+							gjem={lag.navn === 'Øvre + nedre' ? !bæreLagAktiv : false}
 						/>
 						<MaterialeBoks
 							borderTop={borderTop}
@@ -48,7 +40,12 @@ const BæreEvne: FC<BæreEvneProps> = forwardRef<Ref<HTMLDivElement>, BæreEvneP
 							index={index}
 							handleEndreMateriale={handleEndreMateriale}
 						/>
-						{genererInputFelt(lag, borderTop, index)}
+						<TykkelseBoks
+							lag={lag}
+							index={index}
+							borderTop={borderTop}
+							handleEndreTykkelse={handleEndreTykkelse}
+						/>
 					</Rad>
 				);
 			});

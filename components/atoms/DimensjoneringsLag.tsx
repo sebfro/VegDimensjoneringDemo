@@ -8,14 +8,10 @@ import { LagType, MaterialeType } from '../../lib/MidlertidigData/Dimensjonering
 interface LagProps {
 	lagListe: LagType[];
 	fargeMap: Map<MaterialeType, CSSProperties['color']>;
+	mmIPiksler: number;
 }
 
-export const DimensjoneringsLag: FC<LagProps> = ({ lagListe, fargeMap }) => {
-	const mmIPiksler =
-		336 /
-		lagListe.reduce((acc, lag) => {
-			return acc + lag.høyde;
-		}, 0);
+export const DimensjoneringsLag: FC<LagProps> = ({ lagListe, fargeMap, mmIPiksler }) => {
 	const indent = 10;
 	const maksIndex = indent * lagListe.length;
 	let accHøyde = 0;

@@ -17,9 +17,14 @@ import IkonKnapp from '../atoms/Knapper/IkonKnapp.tsx';
 export interface DimensjoneringProps {
 	lagListe: LagType[];
 	oppdaterLagListe: (lagListe: LagType[]) => void;
+	mmIPiksler: number;
 }
 
-export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagListe }) => {
+export const Dimensjonering: FC<DimensjoneringProps> = ({
+	lagListe,
+	oppdaterLagListe,
+	mmIPiksler,
+}) => {
 	const handleEndreTykkelse = useCallback(
 		(value: string, index: number) => {
 			const tempLagLsite = lagListe.slice();
@@ -40,9 +45,12 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagL
 
 	const handleToggleCheckbox = useCallback(
 		(index: number) => {
-			const tempLagLsite = [...lagListe];
-			tempLagLsite[index].aktiv = !tempLagLsite[index].aktiv;
-			oppdaterLagListe(tempLagLsite);
+			const nyLagListe = [...lagListe];
+			if (nyLagListe[index].navn === 'Bærelag') {
+				nyLagListe[index + 1].aktiv = false;
+			}
+			nyLagListe[index].aktiv = !nyLagListe[index].aktiv;
+			oppdaterLagListe(nyLagListe);
 		},
 		[lagListe, oppdaterLagListe]
 	);
@@ -76,7 +84,11 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({ lagListe, oppdaterLagL
 								<Linje />
 								<p>0</p>
 							</LinjeWrapper>
-							<DimensjoneringsLag fargeMap={LagTyperFargeMap} lagListe={lagListe} />
+							<DimensjoneringsLag
+								mmIPiksler={mmIPiksler}
+								fargeMap={LagTyperFargeMap}
+								lagListe={lagListe}
+							/>
 						</Lagene>
 					</LagContainer>
 					<Målestokk />
