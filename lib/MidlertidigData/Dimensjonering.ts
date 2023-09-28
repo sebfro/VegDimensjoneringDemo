@@ -1,5 +1,4 @@
 import { CSSProperties } from 'styled-components';
-import { DimensjoneringProps } from '../../components/Eksperimenter/Dimensjonering.tsx';
 
 export type MaterialeType =
 	| 'Ab 16-70/100'
@@ -34,39 +33,90 @@ export const MaterialeListe = [
 
 export type LagNavn =
 	| 'Bindelag'
-	| 'Bærelag'
-	| 'Øvre + nedre'
+	| 'Bærelag (øvre)'
+	| 'Bærelag (øvre + nedre)'
 	| 'Slitelag'
 	| 'Forsterkningslag'
 	| 'Frostsikringslag'
 	| 'Fiberduk';
 
-export const DimensjoneringInitialState: Pick<DimensjoneringProps, 'lagListe'> = {
-	lagListe: [
-		{
-			høyde: 45,
-			color: 'red',
-			materiale: 'Ab 11 - PMP',
-			aktiv: true,
-			navn: 'Slitelag',
-		},
-		{ høyde: 45, color: 'aqua', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Bindelag' },
-		{ høyde: 100, color: 'pink', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Bærelag' },
-		{ høyde: 50, color: 'yellow', materiale: 'Ab 16-70/100', aktiv: true, navn: 'Øvre + nedre' },
-		{
-			høyde: 120,
-			color: 'black',
-			materiale: 'Kult 22/90',
-			aktiv: true,
-			navn: 'Forsterkningslag',
-		},
-		{
-			høyde: 50,
-			color: 'yellow',
-			materiale: 'Ab 16-70/100',
-			aktiv: false,
-			navn: 'Frostsikringslag',
-		},
-		{ høyde: 50, color: 'yellow', materiale: 'Ab 16-70/100', aktiv: false, navn: 'Fiberduk' },
+export type DimensjoneringsLagType =
+	| 'Bindelag'
+	| 'Bærelag'
+	| 'Slitelag'
+	| 'Forsterkningslag'
+	| 'Frostsikringslag'
+	| 'Fiberduk';
+export const DimensjoneringsLagInitialState = new Map<DimensjoneringsLagType, LagType[]>([
+	[
+		'Slitelag',
+		[
+			{
+				høyde: 45,
+				color: 'red',
+				materiale: 'Ab 11 - PMP',
+				aktiv: true,
+				navn: 'Slitelag',
+			},
+		],
 	],
-};
+	[
+		'Bindelag',
+		[
+			{
+				høyde: 45,
+				color: 'red',
+				materiale: 'Ab 11 - PMP',
+				aktiv: true,
+				navn: 'Bindelag',
+			},
+		],
+	],
+	[
+		'Bærelag',
+		[
+			{
+				høyde: 50,
+				color: 'yellow',
+				materiale: 'Ab 16-70/100',
+				aktiv: true,
+				navn: 'Bærelag (øvre)',
+			},
+			{
+				høyde: 100,
+				color: 'pink',
+				materiale: 'Ab 16-70/100',
+				aktiv: true,
+				navn: 'Bærelag (øvre + nedre)',
+			},
+		],
+	],
+	[
+		'Forsterkningslag',
+		[
+			{
+				høyde: 120,
+				color: 'black',
+				materiale: 'Kult 22/90',
+				aktiv: true,
+				navn: 'Forsterkningslag',
+			},
+		],
+	],
+	[
+		'Frostsikringslag',
+		[
+			{
+				høyde: 50,
+				color: 'yellow',
+				materiale: 'Ab 16-70/100',
+				aktiv: false,
+				navn: 'Frostsikringslag',
+			},
+		],
+	],
+	[
+		'Fiberduk',
+		[{ høyde: 50, color: 'yellow', materiale: 'Ab 16-70/100', aktiv: false, navn: 'Fiberduk' }],
+	],
+]);

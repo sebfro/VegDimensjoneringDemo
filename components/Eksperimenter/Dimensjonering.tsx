@@ -6,6 +6,8 @@ import { FC, useCallback } from 'react';
 import { TextStyles } from '../../styles/TextStyles.ts';
 import Kort from '../atoms/Kort.tsx';
 import {
+	DimensjoneringsLagType,
+	LagNavn,
 	LagType,
 	LagTyperFargeMap,
 	MaterialeType,
@@ -13,10 +15,15 @@ import {
 import BæreEvne from '../domain/Overbygning/BæreEvne.tsx';
 import { BodyLitenTekst, TittelMediumTekst } from '../atoms/TekstKomponenter.ts';
 import IkonKnapp from '../atoms/Knapper/IkonKnapp.tsx';
+import { cloneDeep } from 'lodash';
+import { DimensionContext } from '../../lib/context/dimensionContext.tsx';
 
 export interface DimensjoneringProps {
-	lagListe: LagType[];
-	oppdaterLagListe: (lagListe: LagType[]) => void;
+	lagListe: Map<DimensjoneringsLagType, LagType[]>;
+	oppdaterLagListe: (params: {
+		lagListe: LagType[];
+		dimensjoneringsLag: DimensjoneringsLagType;
+	}) => void;
 	mmIPiksler: number;
 }
 
@@ -25,34 +32,70 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({
 	oppdaterLagListe,
 	mmIPiksler,
 }) => {
-	const handleEndreTykkelse = useCallback(
-		(value: string, index: number) => {
-			const tempLagLsite = lagListe.slice();
-			tempLagLsite[index].høyde = +value;
-			oppdaterLagListe(tempLagLsite);
+	const hentLag = useCallback(
+		(dimLagType: DimensjoneringsLagType, lagNavn: LagNavn[]) => {
+			const nyState = cloneDeep(lagListe);
+			const nyLagListe = nyState.get(dimLagType);
+			const indexList: number[] = [];
+			nyLagListe?.forEach((lag, index) => {
+				if (lagNavn.includes(lag.navn)) {
+					indexList.push(index);
+				}
+			});
+			return { nyLagListe, indexList };
 		},
-		[lagListe, oppdaterLagListe]
+		[lagListe]
+	);
+	const handleEndreTykkelse = useCallback(
+		(value: string, dimLagType: DimensjoneringsLagType, lagNavn: LagNavn[]) => {
+			const { nyLagListe, indexList } = hentLag(dimLagType, lagNavn);
+			if (nyLagListe && indexList.length > 0) {
+				indexList.forEach((index) => {
+					nyLagListe[index].høyde = +value;
+				});
+				oppdaterLagListe({
+					lagListe: nyLagListe,
+					dimensjoneringsLag: dimLagType,
+				});
+			}
+		},
+		[hentLag, oppdaterLagListe]
 	);
 
 	const handleEndreMateriale = useCallback(
-		(value: string, index: number) => {
-			const tempLagLsite = lagListe.slice();
-			tempLagLsite[index].materiale = value as MaterialeType;
-			oppdaterLagListe(tempLagLsite);
+		(value: string, dimLagType: DimensjoneringsLagType, lagNavn: LagNavn[]) => {
+			const { nyLagListe, indexList } = hentLag(dimLagType, lagNavn);
+			if (nyLagListe && indexList.length > 0) {
+				indexList.forEach((index) => {
+					nyLagListe[index].materiale = value as MaterialeType;
+				});
+				oppdaterLagListe({
+					lagListe: nyLagListe,
+					dimensjoneringsLag: dimLagType,
+				});
+			}
 		},
-		[lagListe, oppdaterLagListe]
+		[hentLag, oppdaterLagListe]
 	);
 
 	const handleToggleCheckbox = useCallback(
-		(index: number) => {
-			const nyLagListe = [...lagListe];
-			if (nyLagListe[index].navn === 'Bærelag') {
-				nyLagListe[index + 1].aktiv = false;
+		(dimLagType: DimensjoneringsLagType, lagNavn: Pick<LagType, 'aktiv' | 'navn'>[]) => {
+			let { nyLagListe } = hentLag(
+				dimLagType,
+				lagNavn.map((lag) => lag.navn)
+			);
+			console.log(nyLagListe);
+			if (nyLagListe) {
+				nyLagListe = nyLagListe.map((lag, index) => {
+					return { ...lag, ...lagNavn[index] };
+				});
+				oppdaterLagListe({
+					lagListe: nyLagListe,
+					dimensjoneringsLag: dimLagType,
+				});
 			}
-			nyLagListe[index].aktiv = !nyLagListe[index].aktiv;
-			oppdaterLagListe(nyLagListe);
 		},
-		[lagListe, oppdaterLagListe]
+		[hentLag, oppdaterLagListe]
 	);
 
 	return (
@@ -70,14 +113,13 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({
 					</Grupper>
 				</KortHeader>
 				<KortInnhold>
-					<BæreEvne
-						lagListe={lagListe}
-						handlers={{
-							handleEndreTykkelse,
-							handleToggleCheckbox,
-							handleEndreMateriale,
+					<DimensionContext.Provider
+						value={{
+							handlers: { handleEndreTykkelse, handleToggleCheckbox, handleEndreMateriale },
 						}}
-					/>
+					>
+						<BæreEvne dimLagMap={lagListe} />
+					</DimensionContext.Provider>
 					<LagContainer>
 						<Lagene>
 							<LinjeWrapper>
@@ -87,7 +129,7 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({
 							<DimensjoneringsLag
 								mmIPiksler={mmIPiksler}
 								fargeMap={LagTyperFargeMap}
-								lagListe={lagListe}
+								layerMap={lagListe}
 							/>
 						</Lagene>
 					</LagContainer>

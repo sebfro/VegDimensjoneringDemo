@@ -1,27 +1,26 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { Colors } from '../../../styles/colors';
 import MilimeterInput from '../../atoms/Inputs/MilimeterInput';
 import { ArcherElement } from 'react-archer';
-import { LagType } from '../../../lib/MidlertidigData/Dimensjonering';
+import { DimensjoneringsLagType, LagType } from '../../../lib/MidlertidigData/Dimensjonering';
+import { DimensionContext } from '../../../lib/context/dimensionContext.tsx';
 
 interface TykkelseBoksProps {
-	lag: Pick<LagType, 'høyde' | 'aktiv'>;
-	index: number;
+	lag: Pick<LagType, 'høyde' | 'aktiv' | 'navn'>;
 	borderTop: boolean;
-	handleEndreTykkelse: (value: string, index: number) => void;
+	dimLagType: DimensjoneringsLagType;
 }
-export const TykkelseBoks: FC<TykkelseBoksProps> = ({
-	lag,
-	index,
-	borderTop,
-	handleEndreTykkelse,
-}) => {
+
+export const TykkelseBoks: FC<TykkelseBoksProps> = ({ lag, borderTop, dimLagType }) => {
+	const {
+		handlers: { handleEndreTykkelse },
+	} = useContext(DimensionContext);
 	const boks = (
 		<TykkelseBokser borderTop={borderTop} aktiv={lag.aktiv}>
 			{lag.aktiv && (
 				<StyledMilimeterInput
-					onChangeCallback={(value) => handleEndreTykkelse(value, index)}
+					onChangeCallback={(value) => handleEndreTykkelse(value, dimLagType, [lag.navn])}
 					value={lag.høyde.toString()}
 				/>
 			)}
@@ -30,11 +29,11 @@ export const TykkelseBoks: FC<TykkelseBoksProps> = ({
 	if (!lag.aktiv) return boks;
 	return (
 		<ArcherElement
-			id={'bæreevneRad' + index}
-			key={index}
+			id={lag.navn}
+			key={lag.navn}
 			relations={[
 				{
-					targetId: 'rektangel' + index,
+					targetId: `${lag.navn + 'dimlag'}`,
 					targetAnchor: 'left',
 					sourceAnchor: 'right',
 					style: {
@@ -65,7 +64,10 @@ const StyledMilimeterInput = styled(MilimeterInput)`
 	}
 `;
 
-const TykkelseBokser = styled.div<{ borderTop: boolean; aktiv: boolean }>`
+const TykkelseBokser = styled.div<{
+	borderTop: boolean;
+	aktiv: boolean;
+}>`
 	border-color: ${Colors.grå};
 	height: 3rem;
 	display: flex;

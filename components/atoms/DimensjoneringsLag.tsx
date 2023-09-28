@@ -3,26 +3,31 @@ import { FC } from 'react';
 import { ArcherElement } from 'react-archer';
 import { Colors } from '../../styles/colors.ts';
 import { TextStyles } from '../../styles/TextStyles.ts';
-import { LagType, MaterialeType } from '../../lib/MidlertidigData/Dimensjonering.ts';
+import {
+	DimensjoneringsLagType,
+	LagType,
+	MaterialeType,
+} from '../../lib/MidlertidigData/Dimensjonering.ts';
 
 interface LagProps {
-	lagListe: LagType[];
+	layerMap: Map<DimensjoneringsLagType, LagType[]>;
 	fargeMap: Map<MaterialeType, CSSProperties['color']>;
 	mmIPiksler: number;
 }
 
-export const DimensjoneringsLag: FC<LagProps> = ({ lagListe, fargeMap, mmIPiksler }) => {
+export const DimensjoneringsLag: FC<LagProps> = ({ layerMap, fargeMap, mmIPiksler }) => {
 	const indent = 10;
-	const maksIndex = indent * lagListe.length;
+	const layerList = Array.from(layerMap.values()).flatMap((lag) => lag);
+	const maksIndex = indent * layerList.length;
 	let accHøyde = 0;
-	const antallLag = lagListe.reduce((acc, lag) => {
+	const antallLag = layerList.reduce((acc, lag) => {
 		return lag.aktiv ? acc + 1 : acc;
 	}, 0);
-	return lagListe.map((lag, index) => {
+	return layerList.map((lag, index) => {
 		if (!lag.aktiv) return;
 		accHøyde += lag.høyde;
 		return (
-			<ArcherElement id={'rektangel' + index} key={index}>
+			<ArcherElement id={lag.navn + 'dimlag'} key={index}>
 				<Rad>
 					<Rektangel
 						høyde={lag.høyde * mmIPiksler}

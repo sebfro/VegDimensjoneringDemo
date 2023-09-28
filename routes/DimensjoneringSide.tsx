@@ -1,60 +1,60 @@
 import styled from 'styled-components';
-import {
-	Dimensjonering,
-	DimensjoneringProps,
-} from '../components/Eksperimenter/Dimensjonering.tsx';
+import { Dimensjonering } from '../components/Eksperimenter/Dimensjonering.tsx';
 import { Sidebar } from '../components/domain/DimensjoneringsGrunnlag/Sidebar.tsx';
 import { LeggTilKnapp } from '../components/atoms/Knapper/LeggTilKnapp.tsx';
 import { useCallback, useState } from 'react';
-import { LagType, DimensjoneringInitialState } from '../lib/MidlertidigData/Dimensjonering.ts';
+import {
+	DimensjoneringsLagInitialState,
+	DimensjoneringsLagType,
+	LagType,
+} from '../lib/MidlertidigData/Dimensjonering.ts';
 import { cloneDeep } from 'lodash';
 import { Footer } from '../components/atoms/Footer.tsx';
 
 export const DimensjoneringSide = () => {
-	const [dimensjoneringer, setDimensjoneringer] = useState<Pick<DimensjoneringProps, 'lagListe'>[]>(
-		[cloneDeep(DimensjoneringInitialState)]
-	);
+	const [dimensjoneringer, setDimensjoneringer] = useState<
+		Map<DimensjoneringsLagType, LagType[]>[]
+	>([cloneDeep(DimensjoneringsLagInitialState)]);
 
 	const oppdaterLagListe = useCallback(
-		(lagListe: LagType[], index: number) => {
-			const newState = dimensjoneringer.map((mapLagListe, mapIndex) => {
-				if (index === mapIndex) return { lagListe };
-				return mapLagListe;
-			});
-			setDimensjoneringer(newState);
+		(params: {
+			lagListe: LagType[];
+			dimensjoneringsLag: DimensjoneringsLagType;
+			index: number;
+		}) => {
+			const nyState = cloneDeep(dimensjoneringer);
+			nyState[params.index].set(params.dimensjoneringsLag, params.lagListe);
+			setDimensjoneringer(nyState);
 		},
 		[dimensjoneringer]
 	);
 
 	const leggTilDimensjonering = useCallback(() => {
-		setDimensjoneringer([...dimensjoneringer, cloneDeep(DimensjoneringInitialState)]);
+		setDimensjoneringer([...dimensjoneringer, cloneDeep(DimensjoneringsLagInitialState)]);
 	}, [dimensjoneringer]);
 
 	// Alle dimensjonering skal være realtive til den søtrste/tjukkeste.
 	const kalkulererMmIPiksler = useCallback(() => {
 		let tjukkeste = 0;
-		dimensjoneringer.forEach((dim) => {
-			const dimTykkelse = dim.lagListe.reduce(
-				(acc, curr) => (curr.aktiv ? acc + curr.høyde : acc),
-				0
-			);
+		dimensjoneringer.forEach((map) => {
+			const dimTykkelse = Array.from(map.values()).reduce((acc, curr) => {
+				return acc + curr.reduce((acc, curr) => (curr.aktiv ? acc + curr.høyde : acc), 0);
+			}, 0);
 			if (dimTykkelse > tjukkeste) tjukkeste = dimTykkelse;
 		});
+		console.log('------------------------');
 		return 336 / tjukkeste;
 	}, [dimensjoneringer]);
-
 	return (
 		<StyledContainer>
 			<Sidebar />
 			<DimensjoneringContainer>
-				{dimensjoneringer.map((dim, i) => {
+				{dimensjoneringer.map((dim, index) => {
 					return (
 						<Dimensjonering
-							key={i}
-							oppdaterLagListe={(lagListe) => {
-								oppdaterLagListe(lagListe, i);
-							}}
-							lagListe={dim.lagListe}
+							key={index}
+							oppdaterLagListe={(params) => oppdaterLagListe({ ...params, index })}
+							lagListe={dim}
 							mmIPiksler={kalkulererMmIPiksler()}
 						/>
 					);

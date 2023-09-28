@@ -1,57 +1,46 @@
-import React, { FC, forwardRef, Ref } from 'react';
-import { LagType } from '../../../lib/MidlertidigData/Dimensjonering';
+import React, { FC, forwardRef, Ref, useEffect, useRef } from 'react';
+import { DimensjoneringsLagType, LagType } from '../../../lib/MidlertidigData/Dimensjonering';
 import styled from 'styled-components';
 import { BodyLitenTekst } from '../../atoms/TekstKomponenter.ts';
 import { MaterialeBoks } from './MaterialeBoks.tsx';
-import { LagBoks } from './LagBoks.tsx';
+import { LagBoks } from './LagBoks/LagBoks.tsx';
 import { TykkelseBoks } from './TykkelseBoks.tsx';
+import { DoubleRow } from './LagBoks/DoubleRow.tsx';
 
 interface BæreEvneProps {
-	lagListe: LagType[];
-	handlers: {
-		handleEndreTykkelse: (value: string, index: number) => void;
-		handleToggleCheckbox: (index: number) => void;
-		handleEndreMateriale: (value: string, index: number) => void;
-	};
+	dimLagMap: Map<DimensjoneringsLagType, LagType[]>;
 }
 
 const BæreEvne: FC<BæreEvneProps> = forwardRef<Ref<HTMLDivElement>, BæreEvneProps>(
-	(
-		{ lagListe, handlers: { handleEndreTykkelse, handleToggleCheckbox, handleEndreMateriale } },
-		ref
-	) => {
+	({ dimLagMap }, ref) => {
+		const containerref = useRef<HTMLDivElement>(null);
+
+		useEffect(() => {
+			if (containerref.current) {
+				console.log(containerref.current.offsetHeight);
+			}
+		}, [containerref]);
 		const genererRader = () => {
-			let bæreLagAktiv = true;
-			return lagListe.map((lag, index) => {
-				if (lag.navn === 'Bærelag') bæreLagAktiv = lag.aktiv;
-				const borderTop = index === 0;
-				return (
-					<Rad key={index} ref={ref as React.RefObject<HTMLDivElement>}>
-						<LagBoks
-							lag={lag}
-							index={index}
-							handleToggleCheckbox={handleToggleCheckbox}
-							borderTop={borderTop}
-							gjem={lag.navn === 'Øvre + nedre' ? !bæreLagAktiv : false}
-						/>
-						<MaterialeBoks
-							borderTop={borderTop}
-							lag={lag}
-							index={index}
-							handleEndreMateriale={handleEndreMateriale}
-						/>
-						<TykkelseBoks
-							lag={lag}
-							index={index}
-							borderTop={borderTop}
-							handleEndreTykkelse={handleEndreTykkelse}
-						/>
-					</Rad>
-				);
+			const rader: React.ReactElement[] = [];
+			const borderTopLagtTil = false;
+			dimLagMap.forEach((lagListe, dimLagType) => {
+				if (lagListe.length === 1) {
+					const lag = lagListe[0];
+					rader.push(
+						<Rad ref={ref as React.RefObject<HTMLDivElement>}>
+							<LagBoks dimLagType={dimLagType} lag={lag} borderTop={borderTopLagtTil} />
+							<MaterialeBoks borderTop={borderTopLagtTil} lag={lag} dimLagType={dimLagType} />
+							<TykkelseBoks lag={lag} borderTop={borderTopLagtTil} dimLagType={dimLagType} />
+						</Rad>
+					);
+				} else {
+					rader.push(<DoubleRow lag={lagListe} dimensjoneringsLagType={dimLagType} />);
+				}
 			});
+			return rader;
 		};
 		return (
-			<Container>
+			<Container ref={containerref}>
 				<TittelRad>
 					<BodyLitenTekst>Lag</BodyLitenTekst>
 					<KolonneTittel>Materiale</KolonneTittel>
@@ -70,7 +59,7 @@ const Container = styled.div`
 	display: grid;
 	align-content: center;
 	max-width: 29.5rem;
-	grid-template-rows: repeat(8, min-content);
+	grid-template-rows: repeat(auto-fit, auto);
 `;
 
 const Rad = styled.div`
