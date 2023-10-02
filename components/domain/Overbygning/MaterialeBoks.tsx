@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Dropdown from '../../atoms/Inputs/Dropdown';
+import Dropdown from '../../atoms/Inputs/Dropdown/Dropdown.tsx';
 import { Colors } from '../../../styles/colors';
 import { DropdownArrowContainer } from '../../atoms/Inputs/InputStyling';
 import {

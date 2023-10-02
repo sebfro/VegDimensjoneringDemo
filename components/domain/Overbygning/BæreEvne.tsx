@@ -22,17 +22,18 @@ const BæreEvne: FC<BæreEvneProps> = forwardRef<Ref<HTMLDivElement>, BæreEvneP
 		}, [containerref]);
 		const genererRader = () => {
 			const rader: React.ReactElement[] = [];
-			const borderTopLagtTil = false;
+			let borderTopLagtTil = true;
 			dimLagMap.forEach((lagListe, dimLagType) => {
 				if (lagListe.length === 1) {
 					const lag = lagListe[0];
 					rader.push(
 						<Rad ref={ref as React.RefObject<HTMLDivElement>}>
 							<LagBoks dimLagType={dimLagType} lag={lag} borderTop={borderTopLagtTil} />
-							<MaterialeBoks borderTop={borderTopLagtTil} lag={lag} dimLagType={dimLagType} />
-							<TykkelseBoks lag={lag} borderTop={borderTopLagtTil} dimLagType={dimLagType} />
+							<MaterialeBoks lag={lag} dimLagType={dimLagType} borderTop={borderTopLagtTil} />
+							<TykkelseBoks lag={lag} dimLagType={dimLagType} borderTop={borderTopLagtTil} />
 						</Rad>
 					);
+					borderTopLagtTil = false;
 				} else {
 					rader.push(<DoubleRow lag={lagListe} dimensjoneringsLagType={dimLagType} />);
 				}

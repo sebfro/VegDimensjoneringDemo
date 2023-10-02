@@ -6,15 +6,23 @@ import {
 } from '../../../../lib/MidlertidigData/Dimensjonering';
 import styled, { css } from 'styled-components';
 import { Colors } from '../../../../styles/colors';
-import { MaterialeBoks, TransparangDropdown } from '../MaterialeBoks';
+import { MaterialeBoks } from '../MaterialeBoks';
 import { TykkelseBoks } from '../TykkelseBoks';
 import Checkbox from '../../../atoms/Inputs/CheckBox.tsx';
 import { DimensionContext } from '../../../../lib/context/dimensionContext.tsx';
+import VeiOverbyggningDropdown from '../../../atoms/Inputs/Dropdown/VeiOverbyggningDropdown.tsx';
 
 interface MultiLagBoksProps {
 	lag: LagType[];
 	dimensjoneringsLagType: DimensjoneringsLagType;
 }
+
+/**
+ *
+ * @param lag - {@link LagType[]} listen skal bare inneholde to elementer. Resten blir ignorert.  </br>
+ * @param dimensjoneringsLagType - {@link DimensjoneringsLagType} brukes til å oppdatere state i hovedKomponenten. </br>
+ * @constructor
+ */
 export const DoubleRow: FC<MultiLagBoksProps> = ({ lag, dimensjoneringsLagType }) => {
 	const { handlers } = useContext(DimensionContext);
 	const handleDropdown = useCallback(
@@ -38,7 +46,6 @@ export const DoubleRow: FC<MultiLagBoksProps> = ({ lag, dimensjoneringsLagType }
 			{ aktiv: true, navn: lag[0].navn },
 			{ aktiv: false, navn: lag[1].navn },
 		];
-		console.log(lag[0].navn);
 		if (lag[0].aktiv) {
 			newDimLayerActiveState = [
 				{ aktiv: false, navn: lag[0].navn },
@@ -57,30 +64,38 @@ export const DoubleRow: FC<MultiLagBoksProps> = ({ lag, dimensjoneringsLagType }
 	}, [lag]);
 
 	const generateMaterialAndThickness = useCallback(
-		(lag: LagType) => {
+		(lag: LagType, index: number) => {
+			if (!lag.aktiv && index > 0) return null;
 			return (
 				<>
-					<MaterialeBoks borderTop={true} lag={lag} dimLagType={dimensjoneringsLagType} />
-					<TykkelseBoks lag={lag} borderTop={true} dimLagType={dimensjoneringsLagType} />
+					<MaterialeBoks borderTop={false} lag={lag} dimLagType={dimensjoneringsLagType} />
+					<TykkelseBoks lag={lag} borderTop={false} dimLagType={dimensjoneringsLagType} />
 				</>
 			);
 		},
 		[dimensjoneringsLagType]
 	);
 
+	const oneRow = !lag[1].aktiv;
+
 	return (
 		<Rad>
-			<Container borderTop={false} borderBottom={false}>
+			<Container oneRow={oneRow} borderTop={false} borderBottom={true}>
 				<ChooseLayer>
 					<Checkbox handleOnClick={handleCheckbox} selected={lag[0].aktiv} />
-					<TransparangDropdown
+					<VeiOverbyggningDropdown
 						value={getDropdownValue()}
-						options={lag.map((lag) => lag.navn)}
+						options={lag.map((lag) => {
+							return {
+								displayText: lag.navn.toString(),
+								value: lag.navn,
+							};
+						})}
 						handleOnChange={handleDropdown}
 					/>
 				</ChooseLayer>
 			</Container>
-			{lag.map((lag) => generateMaterialAndThickness(lag))}
+			{lag.map((lag, index) => generateMaterialAndThickness(lag, index))}
 		</Rad>
 	);
 };
@@ -89,13 +104,13 @@ const Rad = styled.div`
 	display: grid;
 	grid-template-columns: auto 160px 110px;
 	grid-template-rows: repeat(2, min-content);
-	max-height: 6rem;
+
 	width: 100%;
 	align-items: center;
 	--border-style: 1px solid;
 `;
 
-const Container = styled.div<{ borderBottom: boolean; borderTop: boolean }>`
+const Container = styled.div<{ borderBottom: boolean; borderTop: boolean; oneRow: boolean }>`
 	border-color: ${Colors.grå};
 	display: flex;
 	padding: 0 0.75rem 0 1rem;
@@ -110,6 +125,14 @@ const Container = styled.div<{ borderBottom: boolean; borderTop: boolean }>`
 		css`
 			border-top: var(--border-style);
 		`};
+	${({ oneRow }) =>
+		oneRow
+			? css`
+					max-height: 3rem;
+			  `
+			: css`
+					max-height: 6rem;
+			  `}
 	border-right: var(--border-style);
 	border-left: var(--border-style);
 	grid-row: 1 / 3;

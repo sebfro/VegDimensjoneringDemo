@@ -42,7 +42,6 @@ export const DimensjoneringSide = () => {
 			}, 0);
 			if (dimTykkelse > tjukkeste) tjukkeste = dimTykkelse;
 		});
-		console.log('------------------------');
 		return 336 / tjukkeste;
 	}, [dimensjoneringer]);
 	return (

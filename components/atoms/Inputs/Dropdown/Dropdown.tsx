@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import SvgGetter from '../SVG/SvgGetter/SvgGetter';
-import { DropdownArrowContainer, SelectWrapper, StyledOption } from './InputStyling';
-import { TextStyles } from '../../../styles/TextStyles.ts';
-import { Colors } from '../../../styles/colors.ts';
+import SvgGetter from '../../SVG/SvgGetter/SvgGetter';
+import { DropdownArrowContainer, SelectWrapper, StyledOption } from '../InputStyling';
+import { Colors } from '../../../../styles/colors';
+import { TextStyles } from '../../../../styles/TextStyles';
 
 export interface DropdownProps {
 	options: string[];
@@ -32,11 +32,10 @@ const Dropdown: React.FC<DropdownProps> = ({
 		},
 		[isOpen]
 	);
-
 	return (
 		<SelectWrapper className={className} placeholderSelected={value === ''}>
 			<SelectContaienr selectIsOpen={isOpen}>
-				<select
+				<StyledSelect
 					onClick={() => setIsOpen(!isOpen)}
 					onBlur={() => setIsOpen(false)}
 					onKeyDown={handleKeyDown}
@@ -51,7 +50,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 							{o.charAt(0) + o.slice(1).toLowerCase()}
 						</StyledOption>
 					))}
-				</select>
+				</StyledSelect>
 				<DropdownArrowContainer>
 					<SvgGetter icon={'PilNed'} />
 				</DropdownArrowContainer>
@@ -78,5 +77,18 @@ const SelectContaienr = styled.div<{ selectIsOpen: boolean }>`
 		`}
 	select {
 		${TextStyles.BodyLiten};
+	}
+`;
+
+const StyledSelect = styled.select`
+	${TextStyles.BodyLiten};
+	width: 100%;
+	height: 48px;
+	background-color: white;
+	color: ${Colors.mørkSort};
+	padding: 0 0 0 1rem;
+
+	:hover {
+		cursor: pointer;
 	}
 `;

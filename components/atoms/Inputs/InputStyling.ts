@@ -19,12 +19,12 @@ export const CommonInputStyling = css`
 // Dropdown / Select styling
 export const SelectStyling = css`
 	select {
-		${TextStyles.BodyMedium};
+		${TextStyles.BodyLiten};
 		width: 100%;
 		height: 48px;
 		background-color: white;
 		color: ${Colors.mørkSort};
-		padding: 0 0 0 16px;
+		padding: 0 0 0 1rem;
 
 		:hover {
 			cursor: pointer;
@@ -37,9 +37,7 @@ export const SelectWrapper = styled.div<{ placeholderSelected: boolean; error?: 
 		color: #97989b;
 		${TextStyles.LabelType};
 	}
-	height: 100%;
-
-	${SelectStyling};
+	height: 48px;
 
 	select {
 		${({ error }) =>
@@ -80,4 +78,3 @@ export const DropdownArrowContainer = styled.span`
 	place-items: center;
 	pointer-events: none;
 `;
-// Dropdown / Select styling

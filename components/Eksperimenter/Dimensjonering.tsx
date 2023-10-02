@@ -84,7 +84,6 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({
 				dimLagType,
 				lagNavn.map((lag) => lag.navn)
 			);
-			console.log(nyLagListe);
 			if (nyLagListe) {
 				nyLagListe = nyLagListe.map((lag, index) => {
 					return { ...lag, ...lagNavn[index] };
