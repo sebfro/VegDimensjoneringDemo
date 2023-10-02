@@ -82,7 +82,6 @@ const Wrapper = styled.div<{ flexDirection: CSSProperties['flexDirection'] }>`
 	label {
 		color: ${Colors.mørkSort};
 		${TextStyles.BodyLiten};
-		font-weight: 300;
 		:hover {
 			cursor: pointer;
 		}

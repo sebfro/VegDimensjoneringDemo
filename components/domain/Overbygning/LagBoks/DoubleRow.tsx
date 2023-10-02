@@ -84,6 +84,7 @@ export const DoubleRow: FC<MultiLagBoksProps> = ({ lag, dimensjoneringsLagType }
 				<ChooseLayer>
 					<Checkbox handleOnClick={handleCheckbox} selected={lag[0].aktiv} />
 					<VeiOverbyggningDropdown
+						error={false}
 						value={getDropdownValue()}
 						options={lag.map((lag) => {
 							return {
@@ -113,7 +114,7 @@ const Rad = styled.div`
 const Container = styled.div<{ borderBottom: boolean; borderTop: boolean; oneRow: boolean }>`
 	border-color: ${Colors.grå};
 	display: flex;
-	padding: 0 0.75rem 0 1rem;
+	padding: 0 0 0 1rem;
 	height: 100%;
 	${({ borderBottom }) =>
 		borderBottom &&

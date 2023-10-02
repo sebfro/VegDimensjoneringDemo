@@ -23,7 +23,7 @@ export const LagTyperFargeMap: Map<MaterialeType, CSSProperties['color']> = new 
 	['Kult 22/90', 'pink'],
 ]);
 
-export const MaterialeListe = [
+export const MaterialeListe: MaterialeType[] = [
 	'Ab 16-70/100',
 	'Ab 11 - PMP',
 	'Ag 16-160/220',

@@ -11,4 +11,7 @@ export const Colors = {
 	lysBlå: '#49A4A8',
 	primaryTekst: '#444F55',
 	bakgrunnGrå: '#F5F5F5',
+	information: {
+		secondaryError: '#E32129',
+	},
 };

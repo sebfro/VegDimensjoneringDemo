@@ -1,14 +1,15 @@
 import styled, { css } from 'styled-components';
-import Dropdown from '../../atoms/Inputs/Dropdown/Dropdown.tsx';
 import { Colors } from '../../../styles/colors';
 import { DropdownArrowContainer } from '../../atoms/Inputs/InputStyling';
 import {
 	DimensjoneringsLagType,
 	LagType,
 	MaterialeListe,
+	MaterialeType,
 } from '../../../lib/MidlertidigData/Dimensjonering';
 import { FC, useContext } from 'react';
 import { DimensionContext } from '../../../lib/context/dimensionContext.tsx';
+import VeiOverbyggningDropdown from '../../atoms/Inputs/Dropdown/VeiOverbyggningDropdown.tsx';
 
 interface MaterialeBoksProps {
 	borderTop: boolean;
@@ -22,12 +23,15 @@ export const MaterialeBoks: FC<MaterialeBoksProps> = ({ borderTop, lag, dimLagTy
 	} = useContext(DimensionContext);
 
 	return (
-		<MaterialeBokser borderTop={borderTop} aktiv={lag.aktiv}>
+		<MaterialeBokser borderTop={borderTop} aktiv={lag.aktiv} error={false}>
 			{lag.aktiv && (
-				<TransparangDropdown
-					options={MaterialeListe}
+				<VeiOverbyggningDropdown
+					error={false}
+					options={MaterialeListe.map((value) => ({ value: value, displayText: value }))}
 					value={lag.materiale}
-					handleOnChange={(value) => handleEndreMateriale(value, dimLagType, [lag.navn])}
+					handleOnChange={(value: MaterialeType) =>
+						handleEndreMateriale(value, dimLagType, [lag.navn])
+					}
 				/>
 			)}
 		</MaterialeBokser>
@@ -37,6 +41,7 @@ export const MaterialeBoks: FC<MaterialeBoksProps> = ({ borderTop, lag, dimLagTy
 const MaterialeBokser = styled.div<{
 	borderTop: boolean;
 	aktiv: boolean;
+	error: boolean;
 }>`
 	border-color: ${Colors.grå};
 	height: 3rem;
@@ -63,14 +68,19 @@ const MaterialeBokser = styled.div<{
 		css`
 			border-top: var(--border-style);
 		`};
-`;
-
-export const TransparangDropdown = styled(Dropdown)`
 	select {
-		border: none;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: transparent;
+		${({ error }) =>
+			error
+				? css`
+						padding: 0 0 0 1.5rem;
+				  `
+				: css`
+						padding: 0 0 0 1rem;
+				  `};
 	}
+	${({ error }) =>
+		error &&
+		css`
+			border-bottom: 2px solid ${Colors.information.secondaryError};
+		`};
 `;

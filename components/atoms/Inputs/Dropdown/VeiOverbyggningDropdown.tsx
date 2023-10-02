@@ -1,7 +1,7 @@
 import { useCallback, useId, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import { DropdownArrowContainer, SelectWrapper, StyledOption } from '../InputStyling';
+import { DropdownArrowContainer, StyledOption } from '../InputStyling';
 import { TextStyles } from '../../../../styles/TextStyles';
 import { Colors } from '../../../../styles/colors';
 import SvgGetter from '../../SVG/SvgGetter/SvgGetter';
@@ -40,7 +40,7 @@ export interface TypedDropdownProps<T> {
  * @param shouldCapitalizeDisplayText
  * @constructor
  */
-const TypedDropdown = <T,>({
+const VeiOverbyggningDropdown = <T,>({
 	options,
 	value,
 	handleOnChange,
@@ -90,6 +90,11 @@ const TypedDropdown = <T,>({
 		<SelectWrapper className={className} placeholderSelected={value === ''} error={error}>
 			{labelText && <Label htmlFor={id}>{labelText} </Label>}
 			<SelectContaienr selectIsOpen={isOpen}>
+				{error && (
+					<ErrorSvgContainer>
+						<SvgGetter icon={'Advarsel'} color={Colors.information.secondaryError} fill={'red'} />
+					</ErrorSvgContainer>
+				)}
 				<StyledSelect
 					id={id}
 					onClick={() => setIsOpen(!isOpen)}
@@ -111,7 +116,7 @@ const TypedDropdown = <T,>({
 	);
 };
 
-export default TypedDropdown;
+export default VeiOverbyggningDropdown;
 
 const SelectContaienr = styled.div<{ selectIsOpen: boolean }>`
 	position: relative;
@@ -122,6 +127,13 @@ const SelectContaienr = styled.div<{ selectIsOpen: boolean }>`
 				rotate: 180deg;
 			}
 		`}
+	:hover,:focus-within {
+		background-color: ${Colors.lysGrå};
+		${DropdownArrowContainer} {
+			background-color: ${Colors.lysGrå};
+		}
+		border-bottom: 1px solid ${Colors.oransje};
+	}
 `;
 
 const Label = styled.label`
@@ -141,9 +153,43 @@ const StyledSelect = styled.select`
 	${TextStyles.BodyLiten};
 	width: 100%;
 	color: ${Colors.mørkSort};
-	padding: 0 0 0 1rem;
 
 	:hover {
 		cursor: pointer;
+		background-color: ${Colors.lysGrå};
 	}
+`;
+
+const SelectWrapper = styled.div<{ placeholderSelected: boolean; error?: boolean }>`
+	.default {
+		color: #97989b;
+		${TextStyles.LabelType};
+	}
+
+	height: 48px;
+
+	select {
+		${({ error }) =>
+			error &&
+			css`
+				border-bottom: 1px solid ${Colors.information.secondaryError};
+			`};
+		${({ placeholderSelected }) =>
+			placeholderSelected &&
+			css`
+				${TextStyles.LabelType};
+			`}
+	}
+`;
+
+const ErrorSvgContainer = styled.div`
+	position: absolute;
+	z-index: 1;
+	left: 0.5rem;
+	top: 0;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1rem;
 `;
