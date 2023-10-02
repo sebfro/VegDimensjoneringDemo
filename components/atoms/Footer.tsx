@@ -2,10 +2,14 @@ import styled from 'styled-components';
 import { Colors } from '../../styles/colors.ts';
 import { BodyLitenTekst } from './TekstKomponenter.ts';
 import SvgGetter from './SVG/SvgGetter/SvgGetter.tsx';
+import { FC } from 'react';
 
-export const Footer = () => {
+interface FooterProps {
+	className?: string;
+}
+export const Footer: FC<FooterProps> = ({ className }) => {
 	return (
-		<Container>
+		<Container className={className}>
 			<Linker>
 				<BodyLitenTekst>Prosjektside</BodyLitenTekst>
 				<BodyLitenTekst>Materialeregister</BodyLitenTekst>
@@ -17,13 +21,12 @@ export const Footer = () => {
 };
 
 const Container = styled.div`
-	position: static;
+	position: absolute;
 	bottom: 0;
-	width: 100%;
+	width: calc(100% - 16rem);
 	border-top: 1px solid ${Colors.grå};
-	grid-column: 2;
+	//grid-column: 2;
 	padding: 1.5rem 0 4rem;
-	margin: 0 4rem;
 	justify-content: space-between;
 	display: flex;
 `;

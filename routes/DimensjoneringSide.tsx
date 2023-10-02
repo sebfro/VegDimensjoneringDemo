@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Dimensjonering } from '../components/Eksperimenter/Dimensjonering.tsx';
 import { Sidebar } from '../components/domain/DimensjoneringsGrunnlag/Sidebar.tsx';
-import { LeggTilKnapp } from '../components/atoms/Knapper/LeggTilKnapp.tsx';
+import { AddButtom } from '../components/atoms/Knapper/AddButtom.tsx';
 import { useCallback, useState } from 'react';
 import {
 	DimensjoneringsLagInitialState,
@@ -45,36 +45,47 @@ export const DimensjoneringSide = () => {
 		return 336 / tjukkeste;
 	}, [dimensjoneringer]);
 	return (
-		<StyledContainer>
-			<Sidebar />
-			<DimensjoneringContainer>
-				{dimensjoneringer.map((dim, index) => {
-					return (
-						<Dimensjonering
-							key={index}
-							oppdaterLagListe={(params) => oppdaterLagListe({ ...params, index })}
-							lagListe={dim}
-							mmIPiksler={kalkulererMmIPiksler()}
-						/>
-					);
-				})}
-
-				<LeggTilKnapp
-					tekst='Legg til overbygning'
-					icon={'Pluss'}
-					onClickCallback={leggTilDimensjonering}
-				/>
-			</DimensjoneringContainer>
-			<Footer />
-		</StyledContainer>
+		<>
+			<StyledContainer>
+				<Sidebar />
+				<Wrapper>
+					<DimensjoneringContainer>
+						{dimensjoneringer.map((dim, index) => {
+							return (
+								<Dimensjonering
+									key={index}
+									oppdaterLagListe={(params) => oppdaterLagListe({ ...params, index })}
+									lagListe={dim}
+									mmIPiksler={kalkulererMmIPiksler()}
+								/>
+							);
+						})}
+					</DimensjoneringContainer>
+					<StyledAddButton
+						tekst='Legg til overbygning'
+						icon={'Pluss'}
+						onClickCallback={leggTilDimensjonering}
+					/>
+					<Footer />
+				</Wrapper>
+			</StyledContainer>
+		</>
 	);
 };
+
+const Wrapper = styled.div`
+	margin: 0 auto;
+	padding: 4rem 4rem 10rem;
+	width: 100%;
+	height: 100%;
+	position: relative;
+`;
+
 const DimensjoneringContainer = styled.div`
-	margin: 4rem auto;
-	min-height: 100dvh;
+	//min-height: 100dvh;
 	display: flex;
+	//grid-template-columns: repeat(auto-fit, minmax(40rem, 62rem));
 	flex-wrap: wrap;
-	padding: 0 4rem 15rem;
 	align-content: start;
 	gap: 4rem;
 	width: 100%;
@@ -83,4 +94,9 @@ const DimensjoneringContainer = styled.div`
 const StyledContainer = styled.div`
 	display: grid;
 	grid-template-columns: 20rem 1fr;
+`;
+
+const StyledAddButton = styled(AddButtom)`
+	margin-top: 1.5rem;
+	width: clamp(20rem, 62rem, 62rem);
 `;

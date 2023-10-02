@@ -12,7 +12,7 @@ interface ButtonWithDottedLineProps {
 	className?: string;
 }
 
-export const LeggTilKnapp: React.FC<ButtonWithDottedLineProps> = ({
+export const AddButtom: React.FC<ButtonWithDottedLineProps> = ({
 	icon,
 	onClickCallback,
 	tekst,

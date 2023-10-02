@@ -148,6 +148,7 @@ const KortInnhold = styled.div`
 const StyledKort = styled(Kort)`
 	height: min-content;
 	width: 100%;
+	max-width: 62rem;
 `;
 
 const Lagene = styled.div`
