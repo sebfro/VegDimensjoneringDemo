@@ -1,11 +1,11 @@
 import { TextStyles } from '../styles/TextStyles.ts';
 import styled from 'styled-components';
 import Kort from '../components/atoms/Kort.tsx';
-import SekundærKnapp from '../components/atoms/Knapper/SekundærKnapp.tsx';
+import ScondaryButton from '../components/atoms/Knapper/ScondaryButton.tsx';
 import { BodyMediumTekst } from '../components/atoms/TekstKomponenter.ts';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
-import HovedKnapp from '../components/atoms/Knapper/HovedKnapp.tsx';
+import HovedKnapp from '../components/atoms/Knapper/PrimaryButton.tsx';
 
 export const Posisjon = () => {
 	const naviagtion = useNavigate();
@@ -40,7 +40,7 @@ const KartPlaceholder = styled.div`
 	background-color: red;
 `;
 
-const StyledSekundærKnapp = styled(SekundærKnapp)`
+const StyledSekundærKnapp = styled(ScondaryButton)`
 	align-self: end;
 	width: 100%;
 `;

@@ -21,7 +21,7 @@ export interface SecondaryButtonProps {
 	disabled?: boolean;
 	width?: CSSProperties['width'];
 }
-const SekundærKnapp: React.FC<SecondaryButtonProps> = ({
+const ScondaryButton: React.FC<SecondaryButtonProps> = ({
 	onClick,
 	tekst,
 	label = 'button',
@@ -53,7 +53,7 @@ const SekundærKnapp: React.FC<SecondaryButtonProps> = ({
 	);
 };
 
-export default SekundærKnapp;
+export default ScondaryButton;
 
 interface ButtonProps {
 	border: boolean;

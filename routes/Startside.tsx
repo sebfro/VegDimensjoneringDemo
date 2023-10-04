@@ -2,14 +2,14 @@ import { FC } from 'react';
 import { Container } from '../styles/BasePageLayout';
 import styled from 'styled-components';
 import Kort from '../components/atoms/Kort';
-import SekundærKnapp from '../components/atoms/Knapper/SekundærKnapp';
+import ScondaryButton from '../components/atoms/Knapper/ScondaryButton.tsx';
 import {
 	BodyLitenTekst,
 	BodyMediumTekst,
 	TittelLitenTekst,
 	TittelStorTekst,
 } from '../components/atoms/TekstKomponenter.ts';
-import HovedKnapp from '../components/atoms/Knapper/HovedKnapp.tsx';
+import HovedKnapp from '../components/atoms/Knapper/PrimaryButton.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
 
@@ -39,7 +39,7 @@ export const Startside: FC = () => {
 							hjullasten. Videre bruker vi tilstandsutviklingmodellen til å beregne deformasjon og
 							slitasje i vegoverbygningen.
 						</Beskrivelse>
-						<SekundærKnapp tekst={'Lær mer om modellene bak løsningen'} />
+						<ScondaryButton tekst={'Lær mer om modellene bak løsningen'} />
 					</Kolonne>
 				</Banner>
 			</StyledKort>

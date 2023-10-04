@@ -10,6 +10,7 @@ import {
 } from '../lib/MidlertidigData/Dimensjonering.ts';
 import { cloneDeep } from 'lodash';
 import { Footer } from '../components/atoms/Footer.tsx';
+import OverbygningHeader from '../components/domain/Overbygning/OverbygningHeader.tsx';
 
 export const DimensjoneringSide = () => {
 	const [dimensjoneringer, setDimensjoneringer] = useState<
@@ -45,31 +46,30 @@ export const DimensjoneringSide = () => {
 		return 336 / tjukkeste;
 	}, [dimensjoneringer]);
 	return (
-		<>
-			<StyledContainer>
-				<Sidebar />
-				<Wrapper>
-					<DimensjoneringContainer>
-						{dimensjoneringer.map((dim, index) => {
-							return (
-								<Dimensjonering
-									key={index}
-									oppdaterLagListe={(params) => oppdaterLagListe({ ...params, index })}
-									lagListe={dim}
-									mmIPiksler={kalkulererMmIPiksler()}
-								/>
-							);
-						})}
-					</DimensjoneringContainer>
-					<StyledAddButton
-						tekst='Legg til overbygning'
-						icon={'Pluss'}
-						onClickCallback={leggTilDimensjonering}
-					/>
-					<Footer />
-				</Wrapper>
-			</StyledContainer>
-		</>
+		<StyledContainer>
+			<Sidebar />
+			<Wrapper>
+				<OverbygningHeader title={'E39 Oppedal - Vågsmyren'} />
+				<DimensjoneringContainer>
+					{dimensjoneringer.map((dim, index) => {
+						return (
+							<Dimensjonering
+								key={index}
+								oppdaterLagListe={(params) => oppdaterLagListe({ ...params, index })}
+								lagListe={dim}
+								mmIPiksler={kalkulererMmIPiksler()}
+							/>
+						);
+					})}
+				</DimensjoneringContainer>
+				<StyledAddButton
+					tekst='Legg til overbygning'
+					icon={'Pluss'}
+					onClickCallback={leggTilDimensjonering}
+				/>
+				<StyledFooter />
+			</Wrapper>
+		</StyledContainer>
 	);
 };
 
@@ -93,10 +93,19 @@ const DimensjoneringContainer = styled.div`
 
 const StyledContainer = styled.div`
 	display: grid;
-	grid-template-columns: 20rem 1fr;
+	grid-template-columns: 20rem calc(100% - 20rem);
+	::-webkit-scrollbar {
+		width: 0.5rem;
+	}
 `;
 
 const StyledAddButton = styled(AddButtom)`
 	margin-top: 1.5rem;
-	width: clamp(20rem, 62rem, 62rem);
+	width: 100%;
+	max-width: 62rem;
+`;
+
+const StyledFooter = styled(Footer)`
+	// Trekker fra paddingen rundt StyledContainer komponeneter med position absolute ikke ta hensyn til det når det kommer til width
+	width: calc(100% - 8rem);
 `;

@@ -14,4 +14,7 @@ export const Colors = {
 	information: {
 		secondaryError: '#E32129',
 	},
+	borders: {
+		secondary: '#DADADA',
+	},
 };

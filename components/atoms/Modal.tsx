@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { Colors } from '../../styles/colors';
-import HovedKnapp from './Knapper/HovedKnapp.tsx';
 import SvgGetter from './SVG/SvgGetter/SvgGetter.tsx';
 import { BodyMediumTekst, TittelStorTekst } from './TekstKomponenter.ts';
-import { SekundærKnapp } from './Knapper/SekundærKnapp.tsx';
+import ScondaryButton from './Knapper/ScondaryButton';
+import PrimaryButton from './Knapper/PrimaryButton';
 
 export type BaseModalProps = {
 	erÅpen: boolean;
@@ -65,8 +65,8 @@ export const Modal: FC<ModalProps> = ({
 				<Beskrivelse>{tekster.beskrivelse}</Beskrivelse>
 				{children && children}
 				<KnappeRad>
-					{bekreft && <HovedKnapp laster={loading} tekst={bekreft} onClick={handleBekreft} />}
-					<SekundærKnapp tekst={lukke} onClick={handleLukk} />
+					{bekreft && <PrimaryButton loading={loading} tekst={bekreft} onClick={handleBekreft} />}
+					<ScondaryButton tekst={lukke} onClick={handleLukk} />
 				</KnappeRad>
 			</Innhold>
 		</StyledModal>
