@@ -62,7 +62,7 @@ export const Modal: FC<ModalProps> = ({
 				<TittelStorTekst>{tekster.tittel}</TittelStorTekst>
 			</Overskrift>
 			<Innhold>
-				<Beskrivelse>{tekster.beskrivelse}</Beskrivelse>
+				<BodyMediumTekst>{tekster.beskrivelse}</BodyMediumTekst>
 				{children && children}
 				<KnappeRad>
 					{bekreft && <PrimaryButton loading={loading} tekst={bekreft} onClick={handleBekreft} />}
@@ -119,5 +119,3 @@ const Overskrift = styled.div<{ inkluderIkon: boolean }>`
 const StyledSvgGetter = styled(SvgGetter)`
 	margin-right: 2rem;
 `;
-
-const Beskrivelse = styled(BodyMediumTekst)``;

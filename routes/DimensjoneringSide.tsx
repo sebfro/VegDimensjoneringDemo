@@ -77,14 +77,12 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 	padding: 4rem 4rem 10rem;
 	width: 100%;
-	height: 100%;
 	position: relative;
+	flex: 2 0 calc(100% - 17.5rem);
 `;
 
 const DimensjoneringContainer = styled.div`
-	//min-height: 100dvh;
 	display: flex;
-	//grid-template-columns: repeat(auto-fit, minmax(40rem, 62rem));
 	flex-wrap: wrap;
 	align-content: start;
 	gap: 4rem;
@@ -92,11 +90,7 @@ const DimensjoneringContainer = styled.div`
 `;
 
 const StyledContainer = styled.div`
-	display: grid;
-	grid-template-columns: 20rem calc(100% - 20rem);
-	::-webkit-scrollbar {
-		width: 0.5rem;
-	}
+	display: flex;
 `;
 
 const StyledAddButton = styled(AddButtom)`

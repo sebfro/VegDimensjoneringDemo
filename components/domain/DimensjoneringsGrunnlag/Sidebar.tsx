@@ -84,9 +84,9 @@ const Container = styled.div`
 	left: 0;
 	width: 20rem;
 	height: 100dvh;
-	// background-color: ${Colors.lysGrå};
 	border-right: 2px solid ${Colors.grå};
 	padding-top: 2.5rem;
+	flex: 0 0 17.5rem;
 `;
 
 const InfoFelt = styled.div`
