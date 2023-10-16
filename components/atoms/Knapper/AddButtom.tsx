@@ -20,8 +20,8 @@ export const AddButtom: React.FC<ButtonWithDottedLineProps> = ({
 }) => {
 	return (
 		<StyledButton onClick={onClickCallback} className={className}>
-			<p>{tekst}</p>
 			<SvgGetter icon={icon} pathFill={Colors.primaryTekst} wrapSvg />
+			<p>{tekst}</p>
 		</StyledButton>
 	);
 };
@@ -36,7 +36,7 @@ const CommonStyling = css`
 
 	border: 2px dashed ${Colors.primaryTekst};
 	width: 100%;
-	padding: 16px 0;
+	padding: 2.5rem;
 	justify-content: center;
 	align-items: center;
 

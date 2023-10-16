@@ -13,6 +13,7 @@ export type LagType = {
 	materiale: MaterialeType;
 	aktiv: boolean;
 	navn: LagNavn;
+	error?: boolean;
 };
 
 export const LagTyperFargeMap: Map<MaterialeType, CSSProperties['color']> = new Map([

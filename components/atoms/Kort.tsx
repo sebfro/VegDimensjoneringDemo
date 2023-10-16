@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import styled, { CSSProperties } from 'styled-components';
-import { Colors } from '../../styles/colors.ts';
 
 interface KortProps {
 	children: React.ReactNode;
@@ -21,9 +20,7 @@ export default Kort;
 
 const StyledKort = styled.div`
 	background-color: white;
-	//border: 1px solid ${Colors.hvit};
-	//color: ${Colors.hvit};
-	border-radius: 1.5rem;
+	border-radius: 0.5rem;
 	padding: 1rem 2rem;
 	font-size: 1.2rem;
 	font-weight: 600;

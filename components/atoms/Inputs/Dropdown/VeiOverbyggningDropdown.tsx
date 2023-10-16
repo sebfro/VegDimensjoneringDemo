@@ -1,4 +1,4 @@
-import { useCallback, useId, useState } from 'react';
+import { ChangeEvent, useCallback, useId, useState, KeyboardEvent } from 'react';
 import styled, { css } from 'styled-components';
 
 import { DropdownArrowContainer, StyledOption } from '../InputStyling';
@@ -56,7 +56,7 @@ const VeiOverbyggningDropdown = <T,>({
 	const placeholderValue = '';
 
 	const handleOnChangeCallback = useCallback(
-		(event: React.ChangeEvent<HTMLSelectElement>) => {
+		(event: ChangeEvent<HTMLSelectElement>) => {
 			const selectedValue = options.find((o) => o.value + '' === event.target?.value);
 			if (selectedValue?.value) {
 				handleOnChange(selectedValue.value);
@@ -78,7 +78,7 @@ const VeiOverbyggningDropdown = <T,>({
 		);
 	});
 	const handleKeyDown = useCallback(
-		(event: React.KeyboardEvent<HTMLSelectElement>) => {
+		(event: KeyboardEvent<HTMLSelectElement>) => {
 			if (event.key === 'Enter' || event.key === ' ') {
 				setIsOpen(!isOpen);
 			}

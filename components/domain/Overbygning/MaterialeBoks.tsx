@@ -22,11 +22,14 @@ export const MaterialeBoks: FC<MaterialeBoksProps> = ({ borderTop, lag, dimLagTy
 		handlers: { handleEndreMateriale },
 	} = useContext(DimensionContext);
 
+	//Midlertidig error for testing
+	const error = false;
+
 	return (
-		<MaterialeBokser borderTop={borderTop} aktiv={lag.aktiv} error={false}>
+		<MaterialeBokser borderTop={borderTop} aktiv={lag.aktiv} error={error}>
 			{lag.aktiv && (
 				<VeiOverbyggningDropdown
-					error={false}
+					error={error}
 					options={MaterialeListe.map((value) => ({ value: value, displayText: value }))}
 					value={lag.materiale}
 					handleOnChange={(value: MaterialeType) =>
@@ -43,7 +46,7 @@ const MaterialeBokser = styled.div<{
 	aktiv: boolean;
 	error: boolean;
 }>`
-	border-color: ${Colors.grå};
+	border-color: ${Colors.borders.secondary};
 	height: 3rem;
 	display: flex;
 	${({ aktiv }) =>
@@ -72,7 +75,7 @@ const MaterialeBokser = styled.div<{
 		${({ error }) =>
 			error
 				? css`
-						padding: 0 0 0 1.5rem;
+						padding: 0 0 0 2rem;
 				  `
 				: css`
 						padding: 0 0 0 1rem;

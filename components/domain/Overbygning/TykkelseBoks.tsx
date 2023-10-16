@@ -68,7 +68,7 @@ const TykkelseBokser = styled.div<{
 	borderTop: boolean;
 	aktiv: boolean;
 }>`
-	border-color: ${Colors.grå};
+	border-color: ${Colors.borders.secondary};
 	height: 3rem;
 	display: flex;
 	${({ aktiv }) =>
@@ -81,7 +81,6 @@ const TykkelseBokser = styled.div<{
 						${StyledMilimeterInput} {
 							padding: 0.75rem 0.5rem calc(0.75rem - 1px);
 						}
-
 						border-bottom: 2px solid ${Colors.oransje};
 						background-color: ${Colors.lysGrå};
 					}

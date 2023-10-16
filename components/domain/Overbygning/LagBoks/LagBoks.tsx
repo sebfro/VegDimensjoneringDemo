@@ -32,7 +32,7 @@ const Container = styled.div<{
 	borderBottom: boolean;
 	borderTop: boolean;
 }>`
-	border-color: ${Colors.grå};
+	border-color: ${Colors.borders.secondary};
 	display: flex;
 	padding: 0 0.75rem 0 1rem;
 	height: 3rem;

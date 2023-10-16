@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Dimensjonering } from '../components/Eksperimenter/Dimensjonering.tsx';
+import { Dimensjonering } from '../components/domain/Overbygning/Dimensjonering.tsx';
 import { Sidebar } from '../components/domain/DimensjoneringsGrunnlag/Sidebar.tsx';
 import { AddButtom } from '../components/atoms/Knapper/AddButtom.tsx';
 import { useCallback, useState } from 'react';

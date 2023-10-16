@@ -6,13 +6,25 @@ import { MaterialeBoks } from './MaterialeBoks.tsx';
 import { LagBoks } from './LagBoks/LagBoks.tsx';
 import { TykkelseBoks } from './TykkelseBoks.tsx';
 import { DoubleRow } from './LagBoks/DoubleRow.tsx';
+import { Colors } from '../../../styles/colors.ts';
+import { TextStyles } from '../../../styles/TextStyles.ts';
 
+type GrunnMurType = {
+	type: string;
+	gruppe: string;
+};
 interface BæreEvneProps {
 	dimLagMap: Map<DimensjoneringsLagType, LagType[]>;
+	grunnMur: GrunnMurType;
 }
 
+/**
+ * BæreEvne
+ * @param dimLagMap {Map<DimensjoneringsLagType, LagType[]>}
+ * @param grunnMur {GrunnMurType}
+ */
 const BæreEvne: FC<BæreEvneProps> = forwardRef<Ref<HTMLDivElement>, BæreEvneProps>(
-	({ dimLagMap }, ref) => {
+	({ dimLagMap, grunnMur }, ref) => {
 		const containerref = useRef<HTMLDivElement>(null);
 
 		useEffect(() => {
@@ -48,6 +60,11 @@ const BæreEvne: FC<BæreEvneProps> = forwardRef<Ref<HTMLDivElement>, BæreEvneP
 					<KolonneTittel>Tykkelse</KolonneTittel>
 				</TittelRad>
 				{genererRader()}
+				<Grunnmur>
+					<p>
+						{grunnMur.type} <span>- {grunnMur.gruppe}</span>
+					</p>
+				</Grunnmur>
 			</Container>
 		);
 	}
@@ -69,7 +86,7 @@ const Rad = styled.div`
 	max-height: 3rem;
 	width: 100%;
 	align-items: center;
-	--border-style: 1px solid;
+	--border-style: 1px solid ${Colors.borders.secondary};
 `;
 
 const TittelRad = styled(Rad)`
@@ -78,4 +95,18 @@ const TittelRad = styled(Rad)`
 
 const KolonneTittel = styled(BodyLitenTekst)`
 	padding-left: 1rem;
+`;
+
+const Grunnmur = styled.div`
+	display: flex;
+	align-items: center;
+	background-color: ${Colors.background.secondary};
+	border: 1px solid ${Colors.borders.secondary};
+	border-top: none;
+	height: 3rem;
+	padding: 0 1rem;
+	${TextStyles.BodyMedium};
+	span {
+		${TextStyles.PlaceholderType};
+	}
 `;

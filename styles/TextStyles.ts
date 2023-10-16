@@ -42,8 +42,8 @@ export const TextStyles = {
 	`,
 	BodyMedium: css`
 		font-weight: 400;
-		font-size: 1.5rem;
-		line-height: 2rem;
+		font-size: 1rem;
+		line-height: 1.5rem;
 	`,
 	BodyLiten: css`
 		${LftEticaLight};
@@ -69,5 +69,11 @@ export const TextStyles = {
 		font-weight: 600;
 		font-size: 1rem;
 		line-height: 1.5rem;
+	`,
+	PlaceholderType: css`
+		font-size: 1rem;
+		font-style: italic;
+		font-weight: 300;
+		line-height: 1.5rem; /* 150% */
 	`,
 };

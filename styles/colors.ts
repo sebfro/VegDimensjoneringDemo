@@ -13,6 +13,12 @@ export const Colors = {
 	bakgrunnGrå: '#F5F5F5',
 	information: {
 		secondaryError: '#E32129',
+		orangeDark: '#E27500',
+		orangeBg: '#FFF5E6',
+	},
+	background: {
+		secondary: '#F5F5F5',
+		redBg: '#FEDFE1',
 	},
 	borders: {
 		secondary: '#DADADA',

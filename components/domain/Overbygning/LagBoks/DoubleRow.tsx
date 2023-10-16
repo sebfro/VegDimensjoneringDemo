@@ -108,11 +108,11 @@ const Rad = styled.div`
 
 	width: 100%;
 	align-items: center;
-	--border-style: 1px solid;
+	--border-style: 1px solid ${Colors.borders.secondary};
 `;
 
 const Container = styled.div<{ borderBottom: boolean; borderTop: boolean; oneRow: boolean }>`
-	border-color: ${Colors.grå};
+	border-color: ${Colors.borders.secondary};
 	display: flex;
 	padding: 0 0 0 1rem;
 	height: 100%;

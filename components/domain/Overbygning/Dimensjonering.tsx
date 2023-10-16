@@ -1,22 +1,23 @@
 import styled, { CSSProperties } from 'styled-components';
 import { ArcherContainer } from 'react-archer';
-import { Colors } from '../../styles/colors.ts';
-import { DimensjoneringsLag } from '../atoms/DimensjoneringsLag.tsx';
-import { FC, useCallback } from 'react';
-import { TextStyles } from '../../styles/TextStyles.ts';
-import Kort from '../atoms/Kort.tsx';
+import { Colors } from '../../../styles/colors.ts';
+import { DimensjoneringsLag } from '../../atoms/DimensjoneringsLag.tsx';
+import { FC, useCallback, useState } from 'react';
+import { TextStyles } from '../../../styles/TextStyles.ts';
+import Kort from '../../atoms/Kort.tsx';
 import {
 	DimensjoneringsLagType,
 	LagNavn,
 	LagType,
 	LagTyperFargeMap,
 	MaterialeType,
-} from '../../lib/MidlertidigData/Dimensjonering.ts';
-import BæreEvne from '../domain/Overbygning/BæreEvne.tsx';
-import { BodyLitenTekst, TittelMediumTekst } from '../atoms/TekstKomponenter.ts';
-import IkonKnapp from '../atoms/Knapper/IkonKnapp.tsx';
+} from '../../../lib/MidlertidigData/Dimensjonering.ts';
+import BæreEvne from './BæreEvne.tsx';
+import { BodyLitenTekst, TittelMediumTekst } from '../../atoms/TekstKomponenter.ts';
+import IkonKnapp from '../../atoms/Knapper/IkonKnapp.tsx';
 import { cloneDeep } from 'lodash';
-import { DimensionContext } from '../../lib/context/dimensionContext.tsx';
+import { DimensionContext } from '../../../lib/context/dimensionContext.tsx';
+import ErrorMessage from '../../atoms/Messages/ErrorMessage.tsx';
 
 export interface DimensjoneringProps {
 	lagListe: Map<DimensjoneringsLagType, LagType[]>;
@@ -32,6 +33,13 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({
 	oppdaterLagListe,
 	mmIPiksler,
 }) => {
+	// Placeholder inntil videre
+	const [feilMeldinger] = useState<string[]>([
+		// 'N200: Krav 3.1.4.4–1: Du må bruke X, X, X eller X i forsterkningslag / Se tabell XXXXXX for å finne riktig materiale',
+		// 'N200: Krav 3.1.4.4–1: Se tabell XXXXXX for å finne riktig materiale',
+		// 'N200: Krav 3.1.4.4–1: Feil materiale i forhold til trafikkgruppe',
+		// 'Materialae for forsterkningslag er i strid med krav XXXXXX i N200 [Lenke]',
+	]);
 	const hentLag = useCallback(
 		(dimLagType: DimensjoneringsLagType, lagNavn: LagNavn[]) => {
 			const nyState = cloneDeep(lagListe);
@@ -98,44 +106,55 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({
 	);
 
 	return (
-		<StyledKort>
-			<ArcherContainer strokeColor={Colors.grå}>
-				<KortHeader>
-					<TitteOgRedigerKnapp>
-						<TittelMediumTekst>Hovedveg 1 </TittelMediumTekst>
-						<IkonKnapp ikon='Rediger' iconSize={2.5} />
-					</TitteOgRedigerKnapp>
-					<StyledBodyLitenTekst>Silt, leire, T4, CU? 50 kPa</StyledBodyLitenTekst>
-					<Grupper>
-						<BodyLitenTekst>Bæreevnegruppe 3</BodyLitenTekst>
-						<BodyLitenTekst>Trafikkgruppe A</BodyLitenTekst>
-					</Grupper>
-				</KortHeader>
-				<KortInnhold>
-					<DimensionContext.Provider
-						value={{
-							handlers: { handleEndreTykkelse, handleToggleCheckbox, handleEndreMateriale },
-						}}
-					>
-						<BæreEvne dimLagMap={lagListe} />
-					</DimensionContext.Provider>
-					<LagContainer>
-						<Lagene>
-							<LinjeWrapper>
-								<Linje />
-								<p>0</p>
-							</LinjeWrapper>
-							<DimensjoneringsLag
-								mmIPiksler={mmIPiksler}
-								fargeMap={LagTyperFargeMap}
-								layerMap={lagListe}
+		<>
+			<StyledKort>
+				<ArcherContainer strokeColor={Colors.grå}>
+					<KortHeader>
+						<TitteOgRedigerKnapp>
+							<TittelMediumTekst>Hovedveg 1 </TittelMediumTekst>
+							<IkonKnapp ikon='Rediger' iconSize={2.5} />
+						</TitteOgRedigerKnapp>
+						<StyledBodyLitenTekst>Silt, leire, T4, CU? 50 kPa</StyledBodyLitenTekst>
+						<Grupper>
+							<BodyLitenTekst>Bæreevnegruppe 3</BodyLitenTekst>
+							<BodyLitenTekst>Trafikkgruppe A</BodyLitenTekst>
+						</Grupper>
+					</KortHeader>
+					<KortInnhold>
+						<DimensionContext.Provider
+							value={{
+								handlers: { handleEndreTykkelse, handleToggleCheckbox, handleEndreMateriale },
+							}}
+						>
+							<BæreEvne
+								dimLagMap={lagListe}
+								grunnMur={{
+									gruppe: 'Bæreevnegruppe 3',
+									type: 'Silt, leire T4 CU 37,5-50 kPa',
+								}}
 							/>
-						</Lagene>
-					</LagContainer>
-					<Målestokk />
-				</KortInnhold>
-			</ArcherContainer>
-		</StyledKort>
+						</DimensionContext.Provider>
+						<LagContainer>
+							<Lagene>
+								<LinjeWrapper>
+									<Linje />
+									<p>0</p>
+								</LinjeWrapper>
+								<DimensjoneringsLag
+									mmIPiksler={mmIPiksler}
+									fargeMap={LagTyperFargeMap}
+									layerMap={lagListe}
+								/>
+							</Lagene>
+						</LagContainer>
+						<Målestokk />
+					</KortInnhold>
+				</ArcherContainer>
+			</StyledKort>
+			{feilMeldinger.length > 0 && (
+				<ErrorMessage feilmeldinger={feilMeldinger} messageBoxType='Error' />
+			)}
+		</>
 	);
 };
 
@@ -149,6 +168,7 @@ const StyledKort = styled(Kort)`
 	height: min-content;
 	width: 100%;
 	max-width: 62rem;
+	padding: 2.5rem;
 `;
 
 const Lagene = styled.div`
