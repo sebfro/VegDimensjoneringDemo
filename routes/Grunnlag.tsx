@@ -7,55 +7,63 @@ import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
 import KnappKort from '../components/atoms/Knapper/KnappKort.tsx';
 import { AkselKonfigurasjon } from '../components/domain/DimensjoneringsGrunnlag/AkselKonfigurasjon.tsx';
-import { Felt, TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
-import { useCallback, useState } from 'react';
+import { TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+
+export interface IFormInputs {
+	fartsgrense?: number;
+	andeltunge?: number;
+	trafikkvekst?: number;
+	PiggdekkDager?: number;
+	Piggdekkandel?: number;
+	saltingAvVegen?: 'Ja' | 'Nei';
+	kjørefelt?: number;
+	ådt?: number;
+}
+
+export const defaultValues: IFormInputs = {
+	saltingAvVegen: 'Ja',
+};
 
 export const Grunnlag = () => {
 	const navigation = useNavigate();
-	const [trafikkData, setTrafikkData] = useState<Map<Felt, number | undefined>>(
-		new Map([
-			['fartsgrense', undefined],
-			['ådt', undefined],
-			['andeltunge', undefined],
-			['trafikkvekst', undefined],
-		])
-	);
-	const oppdaterTrafikkData = useCallback(
-		(verdi: number, felt: Felt) => {
-			const nyState = new Map(trafikkData);
-			nyState.set(felt, verdi);
-			setTrafikkData(nyState);
-		},
-		[trafikkData]
-	);
+	const methods = useForm<IFormInputs>({
+		defaultValues,
+	});
+	const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data);
+
 	return (
 		<>
-			<StyledContainer>
-				<Header>
-					<TittelStorTekst>Dimensjoneringsgrunnlag</TittelStorTekst>
-				</Header>
-				<HøyreKolonne>
-					<TittelLitenTekst>Antall kjørefelt</TittelLitenTekst>
-					<Kjørefelt>
-						<KnappKort icon={'AvmerkingsBoks'} title={'1-felt'} />
-						<KnappKort icon={'PilNed'} title={'2-felt'} />
-						<KnappKort icon={'PilNed'} title={'3-felt'} />
-						<KnappKort icon={'PilNed'} title={'4-felt'} />
-					</Kjørefelt>
-					<TraffikdataTittel>Trafikkdata</TraffikdataTittel>
-					<TrafikkData feltVerdier={trafikkData} oppdaterVerdi={oppdaterTrafikkData} />
-					<AkselKonfigurasjon />
-				</HøyreKolonne>
-				<Posisjon>
-					<PosisjonInnehold></PosisjonInnehold>
-				</Posisjon>
-			</StyledContainer>
-			<KnappeFooter
-				kanppProps={{
-					avbrytOnClick: () => navigation(Urls.posisjon),
-					bekreftOnClick: () => navigation(Urls.dimensjonering),
-				}}
-			/>
+			<FormProvider {...methods}>
+				<form onSubmit={methods.handleSubmit(onSubmit)}>
+					<StyledContainer>
+						<Header>
+							<TittelStorTekst>Dimensjoneringsgrunnlag</TittelStorTekst>
+						</Header>
+						<HøyreKolonne>
+							<TittelLitenTekst>Antall kjørefelt</TittelLitenTekst>
+							<Kjørefelt>
+								<KnappKort icon={'AvmerkingsBoks'} title={'1-felt'} />
+								<KnappKort icon={'PilNed'} title={'2-felt'} />
+								<KnappKort icon={'PilNed'} title={'3-felt'} />
+								<KnappKort icon={'PilNed'} title={'4-felt'} />
+							</Kjørefelt>
+							<TraffikdataTittel>Trafikkdata</TraffikdataTittel>
+							<TrafikkData />
+							<AkselKonfigurasjon />
+						</HøyreKolonne>
+						<Posisjon>
+							<PosisjonInnehold></PosisjonInnehold>
+						</Posisjon>
+					</StyledContainer>
+					<KnappeFooter
+						kanppProps={{
+							avbrytOnClick: () => navigation(Urls.posisjon),
+							bekreftOnClick: () => navigation(Urls.dimensjonering),
+						}}
+					/>
+				</form>
+			</FormProvider>
 		</>
 	);
 };

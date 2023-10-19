@@ -1,29 +1,41 @@
 import styled from 'styled-components';
 import Kort from '../../atoms/Kort';
 import { Colors } from '../../../styles/colors';
-import { FC } from 'react';
 import { LabelTekst } from '../../atoms/TekstKomponenter';
 import UnitInput from '../../atoms/Inputs/UnitInput';
+import { Controller } from 'react-hook-form';
+import { FormRadio } from '../../atoms/Knapper/Radio.tsx';
+import { FC } from 'react';
 
-export type Felt = 'fartsgrense' | 'ådt' | 'andeltunge' | 'trafikkvekst';
+export type Felt =
+	| 'fartsgrense'
+	| 'ådt'
+	| 'andeltunge'
+	| 'trafikkvekst'
+	| 'PiggdekkDager'
+	| 'Piggdekkandel';
 
-export interface TrafikkDataProps {
-	feltVerdier: Map<Felt, number | undefined>;
-	oppdaterVerdi: (verdi: number, felt: Felt) => void;
-}
-export const TrafikkData: FC<TrafikkDataProps> = ({ feltVerdier, oppdaterVerdi }) => {
+export const TrafikkData: FC = () => {
 	const hentInputMedLabel = (label: string, enhet: 'tall' | 'prosent', felt: Felt) => {
 		return (
 			<TekstMedLabel>
 				<LabelTekst>{label}</LabelTekst>
-				<StyledUnitInput
-					value={feltVerdier.get(felt)?.toString()}
-					onChangeCallback={(value) => oppdaterVerdi(+value, felt)}
-					unit={enhet === 'tall' ? 'ingen' : 'prosent'}
+				<Controller
+					render={({ field }) => {
+						return (
+							<StyledUnitInput
+								unit={enhet === 'tall' ? 'ingen' : 'prosent'}
+								onChangeCallback={field.onChange}
+								value={field.value}
+							/>
+						);
+					}}
+					name={felt}
 				/>
 			</TekstMedLabel>
 		);
 	};
+
 	return (
 		<GråKort>
 			<KortInnhold>
@@ -31,6 +43,23 @@ export const TrafikkData: FC<TrafikkDataProps> = ({ feltVerdier, oppdaterVerdi }
 				{hentInputMedLabel('ÅDT (åpningsår)', 'tall', 'ådt')}
 				{hentInputMedLabel('Andel tunge', 'prosent', 'andeltunge')}
 				{hentInputMedLabel('Trafikkvekst', 'prosent', 'trafikkvekst')}
+				{hentInputMedLabel('Piggdekk dager', 'tall', 'PiggdekkDager')}
+				{hentInputMedLabel('Piggdekkandel', 'prosent', 'Piggdekkandel')}
+				<RadioGruppe>
+					<LabelTekst>Salting av vegen</LabelTekst>
+					<RadioKnappene>
+						<Controller
+							render={({ field }) => (
+								<FormRadio defaultChecked {...field} value='Ja' label={'Ja'} />
+							)}
+							name='saltingAvVegen'
+						/>
+						<Controller
+							render={({ field }) => <FormRadio {...field} value='Nei' label={'Nei'} />}
+							name='saltingAvVegen'
+						/>
+					</RadioKnappene>
+				</RadioGruppe>
 			</KortInnhold>
 		</GråKort>
 	);
@@ -47,6 +76,7 @@ const KortInnhold = styled.div`
 	display: grid;
 	grid-template-columns: repeat(4, 8rem);
 	column-gap: 2.5rem;
+	row-gap: 1rem;
 `;
 
 const StyledUnitInput = styled(UnitInput)`
@@ -54,8 +84,19 @@ const StyledUnitInput = styled(UnitInput)`
 `;
 
 const TekstMedLabel = styled.div`
-	max-width: 8rem;
 	display: flex;
 	flex-direction: column;
 	row-gap: 0.25rem;
+`;
+
+const RadioKnappene = styled.div`
+	display: flex;
+	height: 100%;
+	justify-content: space-between;
+	column-gap: 1rem;
+`;
+
+const RadioGruppe = styled(TekstMedLabel)`
+	grid-column: span 2;
+	width: min-content;
 `;

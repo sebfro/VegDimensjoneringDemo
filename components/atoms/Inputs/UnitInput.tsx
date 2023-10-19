@@ -24,6 +24,7 @@ interface UnitInputProps {
 	disabled?: boolean;
 	placeholder?: string;
 	error?: boolean;
+	name?: string;
 }
 
 const UnitInput: React.FC<UnitInputProps> = forwardRef<Ref<HTMLDivElement>, UnitInputProps>(
@@ -36,6 +37,7 @@ const UnitInput: React.FC<UnitInputProps> = forwardRef<Ref<HTMLDivElement>, Unit
 			disabled = false,
 			placeholder = '',
 			error = false,
+			name,
 		},
 		ref
 	) => {
@@ -73,6 +75,7 @@ const UnitInput: React.FC<UnitInputProps> = forwardRef<Ref<HTMLDivElement>, Unit
 					unit={unit}
 					className='no-spinner'
 					ref={inputRef}
+					name={name}
 				/>
 				<BodyLitenTekst>{UnitTextMap.get(unit)}</BodyLitenTekst>
 			</InputWrapper>
