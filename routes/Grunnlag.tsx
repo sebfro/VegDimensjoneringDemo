@@ -5,10 +5,12 @@ import Kort from '../components/atoms/Kort.tsx';
 import { KnappeFooter } from '../components/atoms/Knapper/KnappeFooter.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
-import KnappKort from '../components/atoms/Knapper/KnappKort.tsx';
 import { AkselKonfigurasjon } from '../components/domain/DimensjoneringsGrunnlag/AkselKonfigurasjon.tsx';
 import { TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Kjørefelt } from '../components/domain/DimensjoneringsGrunnlag/Kjørefelt.tsx';
+
+export type KjørefeltType = 1 | 2 | 3 | 4;
 
 export interface IFormInputs {
 	fartsgrense?: number;
@@ -17,7 +19,7 @@ export interface IFormInputs {
 	PiggdekkDager?: number;
 	Piggdekkandel?: number;
 	saltingAvVegen?: 'Ja' | 'Nei';
-	kjørefelt?: number;
+	kjørefelt?: KjørefeltType;
 	ådt?: number;
 }
 
@@ -41,16 +43,10 @@ export const Grunnlag = () => {
 							<TittelStorTekst>Dimensjoneringsgrunnlag</TittelStorTekst>
 						</Header>
 						<HøyreKolonne>
-							<TittelLitenTekst>Antall kjørefelt</TittelLitenTekst>
-							<Kjørefelt>
-								<KnappKort icon={'AvmerkingsBoks'} title={'1-felt'} />
-								<KnappKort icon={'PilNed'} title={'2-felt'} />
-								<KnappKort icon={'PilNed'} title={'3-felt'} />
-								<KnappKort icon={'PilNed'} title={'4-felt'} />
-							</Kjørefelt>
 							<TraffikdataTittel>Trafikkdata</TraffikdataTittel>
 							<TrafikkData />
 							<AkselKonfigurasjon />
+							<Kjørefelt />
 						</HøyreKolonne>
 						<Posisjon>
 							<PosisjonInnehold></PosisjonInnehold>
@@ -90,12 +86,6 @@ const Posisjon = styled(Kort)`
 
 const PosisjonInnehold = styled.div`
 	display: grid;
-`;
-
-const Kjørefelt = styled.div`
-	display: flex;
-	column-gap: 1.5rem;
-	margin-top: 1.5rem;
 `;
 
 const TraffikdataTittel = styled(TittelLitenTekst)`

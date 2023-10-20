@@ -15,6 +15,8 @@ export const Colors = {
 		secondaryError: '#E32129',
 		orangeDark: '#E27500',
 		orangeBg: '#FFF5E6',
+		secondaryInfo: '#077197',
+		infoBg: '#E6F1F5',
 	},
 	background: {
 		secondary: '#F5F5F5',

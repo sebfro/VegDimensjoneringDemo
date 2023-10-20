@@ -13,7 +13,7 @@ import {
 	MaterialeType,
 } from '../../../lib/MidlertidigData/Dimensjonering.ts';
 import BæreEvne from './BæreEvne.tsx';
-import { BodyLitenTekst, TittelMediumTekst } from '../../atoms/TekstKomponenter.ts';
+import { TittelMediumTekst } from '../../atoms/TekstKomponenter.ts';
 import IkonKnapp from '../../atoms/Knapper/IkonKnapp.tsx';
 import { cloneDeep } from 'lodash';
 import { DimensionContext } from '../../../lib/context/dimensionContext.tsx';
@@ -114,11 +114,6 @@ export const Dimensjonering: FC<DimensjoneringProps> = ({
 							<TittelMediumTekst>Hovedveg 1 </TittelMediumTekst>
 							<IkonKnapp ikon='Rediger' iconSize={2.5} />
 						</TitteOgRedigerKnapp>
-						<StyledBodyLitenTekst>Silt, leire, T4, CU? 50 kPa</StyledBodyLitenTekst>
-						<Grupper>
-							<BodyLitenTekst>Bæreevnegruppe 3</BodyLitenTekst>
-							<BodyLitenTekst>Trafikkgruppe A</BodyLitenTekst>
-						</Grupper>
 					</KortHeader>
 					<KortInnhold>
 						<DimensionContext.Provider
@@ -219,13 +214,4 @@ const TitteOgRedigerKnapp = styled.div`
 	display: flex;
 	column-gap: 1.5rem;
 	margin-right: 2rem;
-`;
-
-const StyledBodyLitenTekst = styled(BodyLitenTekst)`
-	margin-right: 2rem;
-`;
-
-const Grupper = styled.div`
-	display: flex;
-	column-gap: 1rem;
 `;

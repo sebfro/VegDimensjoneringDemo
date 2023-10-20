@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import Kort from '../../atoms/Kort';
-import { Colors } from '../../../styles/colors';
 import { LabelTekst } from '../../atoms/TekstKomponenter';
 import UnitInput from '../../atoms/Inputs/UnitInput';
 import { Controller } from 'react-hook-form';
 import { FormRadio } from '../../atoms/Knapper/Radio.tsx';
 import { FC } from 'react';
+import { MessageWithLink } from '../../atoms/Messages/MessageWithLink.tsx';
 
 export type Felt =
 	| 'fartsgrense'
@@ -37,7 +37,7 @@ export const TrafikkData: FC = () => {
 	};
 
 	return (
-		<GråKort>
+		<StyledKort>
 			<KortInnhold>
 				{hentInputMedLabel('Fartsgrense', 'tall', 'fartsgrense')}
 				{hentInputMedLabel('ÅDT (åpningsår)', 'tall', 'ådt')}
@@ -60,15 +60,29 @@ export const TrafikkData: FC = () => {
 						/>
 					</RadioKnappene>
 				</RadioGruppe>
+				<StyledMessageBox
+					url={'google.com'}
+					text={{
+						url: 'N100: Tabell 3.3—1 — Dimensjoneringsklasser for nasjonale hovedveger',
+						heading: 'Dimensjoneringsklasse',
+						description: {
+							text: 'H1 - Nasjonal hovedveg',
+							reference: 'Bestemmes av ÅDT og fartsgrense',
+						},
+					}}
+				/>
 			</KortInnhold>
-		</GråKort>
+		</StyledKort>
 	);
 };
 
-const GråKort = styled(Kort)`
-	background-color: ${Colors.lysGrå};
+const StyledMessageBox = styled(MessageWithLink)`
+	width: 100%;
+	grid-column: 1 / span 4;
+`;
+
+const StyledKort = styled(Kort)`
 	border-radius: 0;
-	margin-bottom: 2.125rem;
 	padding: 1.5rem 2.5rem 2.5rem;
 `;
 

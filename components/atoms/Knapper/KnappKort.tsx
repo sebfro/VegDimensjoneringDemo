@@ -3,40 +3,26 @@ import styled from 'styled-components';
 import FocusOutline from '../StyledComponents/FocusOutline';
 import { Colors } from '../../../styles/colors';
 import SvgGetter from '../SVG/SvgGetter/SvgGetter';
-import Kort from '../Kort';
-import { Icons } from '../SVG/SvgGetter/Icons';
 import { BodyLitenTekst } from '../TekstKomponenter.ts';
+import { Icons } from '../SVG/SvgGetter/Icons.ts';
 
-type Category = { id: string; description: string };
-export const categories: Category[] = [
-	{ id: '22', description: 'Sideareal' },
-	{ id: '32', description: 'Eksisterende rekkverk' },
-	{ id: '44', description: 'Vegbanen' },
-	{ id: '42', description: 'Kryss, avkjørsel og rundkjøring' },
-	{ id: '48', description: 'Gang og sykkelveg' },
-	{ id: '54', description: 'Annet sted' },
-];
-
-export const categoryCardIconsList: Icons[] = [
-	'Advarsel',
-	'Informasjon',
-	'IngenNyeBilder',
-	'StatusLoader',
-];
-
-export type CategoryCardIcons = (typeof categoryCardIconsList)[number];
-
-interface NavigasjonsKortProps {
-	icon: CategoryCardIcons;
+interface NavigasjonsKortProps extends React.HTMLAttributes<HTMLButtonElement> {
 	title: string;
 	height?: number;
+	selected?: boolean;
 }
 
-const KnappKort: React.FC<NavigasjonsKortProps> = ({ icon, title, height }) => {
+const KnappKort: React.FC<NavigasjonsKortProps> = ({
+	title,
+	height,
+	selected = false,
+	...props
+}) => {
+	const icon: Icons = selected ? 'AvmerkingsBoks' : 'CheckMark';
 	return (
 		<FocusOutline offset={10} height={'100%'}>
-			<StyledCard height={height} tabIndex={0}>
-				<Sirkel />
+			<StyledCard height={height} tabIndex={0} role='button' {...props}>
+				<Sirkel>{selected && <Dot />} </Sirkel>
 				<Content>
 					<StyledSvgGetter icon={icon} wrapSvg />
 					<BodyLitenTekst>{title}</BodyLitenTekst>
@@ -53,22 +39,32 @@ const Sirkel = styled.div`
 	border: 2px solid ${Colors.primaryTekst};
 	width: 2rem;
 	height: 2rem;
+	padding: 0.3rem;
 	position: absolute;
 	top: 1rem;
 	right: 1rem;
 `;
 
-const StyledCard = styled(Kort)<{ height?: number }>`
+const Dot = styled.div`
+	border-radius: 50%;
+	background-color: ${Colors.primaryTekst};
+	width: 100%;
+	height: 100%;
+`;
+const StyledCard = styled.button<{ height?: number }>`
 	border: 1px solid ${Colors.grå};
 	padding: 1rem;
 	background-color: white;
 	border-radius: 0;
-	height: 10.25rem;
-	width: 10.25rem;
+	position: relative;
+	width: 100%;
+	min-height: 10.375rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: all 0.2s ease-in-out;
 	:focus {
+		transition: all 0.2s ease-in-out;
 		box-shadow: 0 0 16px 12px rgba(53, 62, 67, 0.08);
 		border: 3px solid ${Colors.primaryTekst};
 		border-radius: 2px;
@@ -76,6 +72,7 @@ const StyledCard = styled(Kort)<{ height?: number }>`
 	}
 
 	:hover {
+		cursor: pointer;
 		box-shadow: 0 0 8px 4px rgba(53, 62, 67, 0.3);
 	}
 `;
