@@ -34,6 +34,13 @@ export const TextStyles = {
 		font-size: 1.5rem;
 		line-height: 2rem;
 	`,
+	TittelEkstraLiten: css`
+		${LftEtica};
+		font-size: 20px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 1.5rem;
+	`,
 	BodyStor: css`
 		${LftEtica};
 		font-weight: 400;

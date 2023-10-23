@@ -5,9 +5,10 @@ const {
 	BodyMedium,
 	BodyStor,
 	BodyLiten,
+	TittelStor,
 	TittelMedium,
 	TittelLiten,
-	TittelStor,
+	TittelEkstraLiten,
 	Nummer,
 	LabelType,
 	Knapp,
@@ -20,6 +21,9 @@ export const TittelMediumTekst = styled.h2`
 `;
 export const TittelLitenTekst = styled.h3`
 	${TittelLiten};
+`;
+export const TittelEkstraLitenTekst = styled.h4`
+	${TittelEkstraLiten};
 `;
 export const BodyStorTekst = styled.p`
 	${BodyStor};

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Container } from '../styles/BasePageLayout';
 import { TittelLitenTekst, TittelStorTekst } from '../components/atoms/TekstKomponenter.ts';
-import Kort from '../components/atoms/Kort.tsx';
 import { KnappeFooter } from '../components/atoms/Knapper/KnappeFooter.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
@@ -9,6 +8,8 @@ import { AkselKonfigurasjon } from '../components/domain/DimensjoneringsGrunnlag
 import { TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { Kjørefelt } from '../components/domain/DimensjoneringsGrunnlag/Kjørefelt.tsx';
+import { TrafficGroupCalculator } from '../lib/Utils/TrafficGroupCalculator.ts';
+import { Posisjon } from '../components/domain/DimensjoneringsGrunnlag/Posisjon.tsx';
 
 export type KjørefeltType = 1 | 2 | 3 | 4;
 
@@ -32,7 +33,17 @@ export const Grunnlag = () => {
 	const methods = useForm<IFormInputs>({
 		defaultValues,
 	});
-	const onSubmit: SubmitHandler<IFormInputs> = (data) => console.log(data);
+	const kalk = new TrafficGroupCalculator({});
+	const onSubmit: SubmitHandler<IFormInputs> = (data) => {
+		kalk.UpdateValues(data);
+		kalk.calculateTrafficGroup();
+		console.log(kalk.trafficGroup);
+	};
+
+	methods.watch((data: IFormInputs) => {
+		kalk.UpdateValues(data);
+		kalk.calculateTrafficGroup();
+	});
 
 	return (
 		<>
@@ -48,9 +59,7 @@ export const Grunnlag = () => {
 							<AkselKonfigurasjon />
 							<Kjørefelt />
 						</HøyreKolonne>
-						<Posisjon>
-							<PosisjonInnehold></PosisjonInnehold>
-						</Posisjon>
+						<Posisjon />
 					</StyledContainer>
 					<KnappeFooter
 						kanppProps={{
@@ -70,6 +79,7 @@ const StyledContainer = styled(Container)`
 	grid-template-columns: 2fr 1fr;
 	grid-template-rows: 5rem auto;
 	padding-top: 4rem;
+	grid-column-gap: 4rem;
 `;
 
 const Header = styled.div`
@@ -79,14 +89,6 @@ const Header = styled.div`
 `;
 
 const HøyreKolonne = styled.div``;
-
-const Posisjon = styled(Kort)`
-	border-radius: 0;
-`;
-
-const PosisjonInnehold = styled.div`
-	display: grid;
-`;
 
 const TraffikdataTittel = styled(TittelLitenTekst)`
 	margin: 4rem 0 1.5rem;
