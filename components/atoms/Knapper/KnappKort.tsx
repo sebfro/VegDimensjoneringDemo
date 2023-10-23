@@ -64,7 +64,7 @@ const Dot = styled.div`
 `;
 const StyledCard = styled.button<{ height?: number }>`
 	border: 1px solid ${Colors.grå};
-	padding: 1rem;
+	padding: 3rem 1rem 1rem;
 	background-color: white;
 	border-radius: 0;
 	position: relative;
@@ -80,7 +80,6 @@ const StyledCard = styled.button<{ height?: number }>`
 		box-shadow: 0 0 16px 12px rgba(53, 62, 67, 0.08);
 		border: 3px solid ${Colors.primaryTekst};
 		border-radius: 2px;
-		padding: 29px;
 	}
 
 	:hover {
@@ -113,5 +112,6 @@ const OrangeLine = styled.div`
 	height: 64px;
 	width: 2px;
 	background-color: ${Colors.oransje};
+	//Generert background-image fra https://kovart.github.io/dashed-border-generator/
 	background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='white' stroke-width='2' stroke-dasharray='8%2c 6' stroke-dashoffset='0' stroke-linecap='butt'/%3e%3c/svg%3e");
 `;

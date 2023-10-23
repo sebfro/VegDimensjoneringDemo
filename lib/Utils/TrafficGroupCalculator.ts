@@ -1,6 +1,6 @@
 import { IFormInputs, KjørefeltType } from '../../routes/Grunnlag.tsx';
 
-type Fordelingsfatkor = 1 | 0.5 | 0.45 | 0.4;
+type FordelingsFaktor = 1 | 0.5 | 0.45 | 0.4;
 export type TrafficGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
 const TrafficGroup: { group: TrafficGroup; treshhold: number }[] = [
@@ -12,10 +12,17 @@ const TrafficGroup: { group: TrafficGroup; treshhold: number }[] = [
 	{ group: 'F', treshhold: 10000000 },
 ];
 
+const FordelingsfaktorMap = new Map<KjørefeltType, FordelingsFaktor>([
+	[1, 1],
+	[2, 0.5],
+	[3, 0.45],
+	[4, 0.4],
+]);
+
 /**
- * Calculates the traffic group based on the ådt <br/>
+ * Calculates the traffic group based on the provided params <br/>
  * @param ådt {number} gjennomsnittlig antall tunge kjøretøy pr. døgn <br/>
- * @param f {Fordelingsfatkor} fordelingsfaktor er basert på antall felt veien har. 1 felt = 1, 2 felt = 0.5, 3 felt = 0.45, 4 felt = 0.4. (Settes normalt til 0.5) <br/>
+ * @param f {FordelingsFaktor} fordelingsfaktor er basert på antall felt veien har. 1 felt = 1, 2 felt = 0.5, 3 felt = 0.45, 4 felt = 0.4. (Settes normalt til 0.5) <br/>
  * @param p {number} Årlig trafikkvekst for tunge kjøretøy i prosent. <br/>
  * @param c {number} Gjennomsnittlig antall aksler pr. tungt kjøretøy (normalt settes C=2.4) <br/>
  * @param e {number} Gjennomsnittlig ekvivalentsfaktor for akslene på tunge kjøretøy ( I norge settes normalt E=0.427 ved tillatt aksellast 10 tonn) <br/>
@@ -23,7 +30,7 @@ const TrafficGroup: { group: TrafficGroup; treshhold: number }[] = [
 export class TrafficGroupCalculator {
 	private ådt: number | undefined;
 	private andelTunge: number | undefined;
-	private f: Fordelingsfatkor | undefined;
+	private f: FordelingsFaktor | undefined;
 	private p: number | undefined;
 	private c: number;
 	private e: number;
@@ -57,18 +64,8 @@ export class TrafficGroupCalculator {
 		this.calculateTrafficGroup();
 	};
 
-	private getFordelingsfaktor = (numberOfLanes?: KjørefeltType): Fordelingsfatkor => {
-		switch (numberOfLanes) {
-			case 1:
-				return 1;
-			case 3:
-				return 0.45;
-			case 4:
-				return 0.4;
-			case 2:
-			default:
-				return 0.5;
-		}
+	private setFordelingsfaktor = (numberOfLanes?: KjørefeltType) => {
+		this.f = numberOfLanes ? FordelingsfaktorMap.get(numberOfLanes) : undefined;
 	};
 
 	public calculateTrafficGroup = () => {
@@ -91,9 +88,5 @@ export class TrafficGroupCalculator {
 		})?.group;
 		this.n = n;
 		this.trafficGroup = group;
-	};
-
-	public setFordelingsfaktor = (numberOfLanes?: KjørefeltType) => {
-		this.f = this.getFordelingsfaktor(numberOfLanes);
 	};
 }
