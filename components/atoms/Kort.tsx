@@ -1,17 +1,16 @@
-import { FC } from 'react';
+import { FC, HTMLAttributes, ReactNode } from 'react';
 import styled, { CSSProperties } from 'styled-components';
-import { Colors } from '../../styles/colors.ts';
 
-interface KortProps {
-	children: React.ReactNode;
+interface KortProps extends HTMLAttributes<HTMLDivElement> {
+	children: ReactNode;
 	className?: string;
 	color?: CSSProperties['color'];
 	tabIndex?: number;
 }
 
-const Kort: FC<KortProps> = ({ children, className, color, tabIndex }) => {
+const Kort: FC<KortProps> = ({ children, className, color, tabIndex, ...props }) => {
 	return (
-		<StyledKort color={color} className={className} tabIndex={tabIndex}>
+		<StyledKort color={color} className={className} tabIndex={tabIndex} {...props}>
 			{children}
 		</StyledKort>
 	);
@@ -21,9 +20,7 @@ export default Kort;
 
 const StyledKort = styled.div`
 	background-color: white;
-	//border: 1px solid ${Colors.hvit};
-	//color: ${Colors.hvit};
-	border-radius: 1.5rem;
+	border-radius: 0.5rem;
 	padding: 1rem 2rem;
 	font-size: 1.2rem;
 	font-weight: 600;

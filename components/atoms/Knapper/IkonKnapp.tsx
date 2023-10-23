@@ -25,7 +25,28 @@ interface CircleButtonProps {
 	loading?: boolean;
 	disabled?: boolean;
 }
-const IconButton: React.FC<CircleButtonProps> = ({
+
+/**
+ *
+ * @param ikon - {link Icons} </br>
+ * @param onClick </br>
+ * @param className </br>
+ * @param tekst string </br>
+ * @param href </br>
+ * @param downloadFileName </br>
+ * @param svgColor </br>
+ * @param iconSize er i rem </br>
+ * @param backgroundColor </br>
+ * @param border </br>
+ * @param circle </br>
+ * @param label </br>
+ * @param type </br>
+ * @param useStroke </br>
+ * @param loading </br>
+ * @param disabled </br>
+ * @constructor
+ */
+const IkonKnapp: React.FC<CircleButtonProps> = ({
 	ikon,
 	onClick,
 	className,
@@ -33,7 +54,7 @@ const IconButton: React.FC<CircleButtonProps> = ({
 	href,
 	downloadFileName,
 	svgColor = Colors.primaryTekst,
-	iconSize = 40,
+	iconSize = 2,
 	backgroundColor = 'white',
 	border = true,
 	circle = true,
@@ -93,7 +114,7 @@ const IconButton: React.FC<CircleButtonProps> = ({
 	);
 };
 
-export default IconButton;
+export default IkonKnapp;
 
 interface IconButtonStylingProps {
 	backgroundColor: string;
@@ -145,8 +166,8 @@ const IconButtonStyling = css<IconButtonStylingProps>`
 	${({ iconSize }) =>
 		iconSize
 			? css`
-					width: ${iconSize.toString() + 'px'};
-					height: ${iconSize.toString() + 'px'};
+					width: ${iconSize.toString() + 'rem'};
+					height: ${iconSize.toString() + 'rem'};
 			  `
 			: css`
 					width: min-content;

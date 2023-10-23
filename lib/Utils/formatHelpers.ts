@@ -77,3 +77,8 @@ const erGydldigDataMegde = (dataMengde: number) =>
 	dataMengde.toString() === 'NaN' ? '0' : dataMengde.toFixed(1);
 
 export const isNumberString = (value: string) => /^\d+$/.test(value);
+
+export const capitalizeString = (text?: string) => {
+	if (!text) return '';
+	return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};

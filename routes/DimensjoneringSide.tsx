@@ -1,71 +1,105 @@
 import styled from 'styled-components';
-import {
-	Dimensjonering,
-	DimensjoneringProps,
-} from '../components/Eksperimenter/Dimensjonering.tsx';
+import { Dimensjonering } from '../components/domain/Overbygning/Dimensjonering.tsx';
 import { Sidebar } from '../components/domain/DimensjoneringsGrunnlag/Sidebar.tsx';
-import { LeggTilKnapp } from '../components/atoms/Knapper/LeggTilKnapp.tsx';
+import { AddButtom } from '../components/atoms/Knapper/AddButtom.tsx';
 import { useCallback, useState } from 'react';
-import { LagType, DimensjoneringInitialState } from '../lib/MidlertidigData/Dimensjonering.ts';
+import {
+	DimensjoneringsLagInitialState,
+	DimensjoneringsLagType,
+	LagType,
+} from '../lib/MidlertidigData/Dimensjonering.ts';
 import { cloneDeep } from 'lodash';
+import { Footer } from '../components/atoms/Footer.tsx';
+import OverbygningHeader from '../components/domain/Overbygning/OverbygningHeader.tsx';
 
 export const DimensjoneringSide = () => {
-	const [dimensjoneringer, setDimensjoneringer] = useState<Pick<DimensjoneringProps, 'lagListe'>[]>(
-		[cloneDeep(DimensjoneringInitialState)]
-	);
+	const [dimensjoneringer, setDimensjoneringer] = useState<
+		Map<DimensjoneringsLagType, LagType[]>[]
+	>([cloneDeep(DimensjoneringsLagInitialState)]);
 
 	const oppdaterLagListe = useCallback(
-		(lagListe: LagType[], index: number) => {
-			const newState = dimensjoneringer.map((mapLagListe, mapIndex) => {
-				if (index === mapIndex) return { lagListe };
-				return mapLagListe;
-			});
-			setDimensjoneringer(newState);
+		(params: {
+			lagListe: LagType[];
+			dimensjoneringsLag: DimensjoneringsLagType;
+			index: number;
+		}) => {
+			const nyState = cloneDeep(dimensjoneringer);
+			nyState[params.index].set(params.dimensjoneringsLag, params.lagListe);
+			setDimensjoneringer(nyState);
 		},
 		[dimensjoneringer]
 	);
 
 	const leggTilDimensjonering = useCallback(() => {
-		setDimensjoneringer([...dimensjoneringer, cloneDeep(DimensjoneringInitialState)]);
+		setDimensjoneringer([...dimensjoneringer, cloneDeep(DimensjoneringsLagInitialState)]);
 	}, [dimensjoneringer]);
 
+	// Alle dimensjonering skal være realtive til den søtrste/tjukkeste.
+	const kalkulererMmIPiksler = useCallback(() => {
+		let tjukkeste = 0;
+		dimensjoneringer.forEach((map) => {
+			const dimTykkelse = Array.from(map.values()).reduce((acc, curr) => {
+				return acc + curr.reduce((acc, curr) => (curr.aktiv ? acc + curr.høyde : acc), 0);
+			}, 0);
+			if (dimTykkelse > tjukkeste) tjukkeste = dimTykkelse;
+		});
+		return 336 / tjukkeste;
+	}, [dimensjoneringer]);
 	return (
 		<StyledContainer>
 			<Sidebar />
-			<DimensjoneringContainer>
-				{dimensjoneringer.map((dim, i) => {
-					return (
-						<Dimensjonering
-							key={i}
-							oppdaterLagListe={(lagListe) => {
-								oppdaterLagListe(lagListe, i);
-							}}
-							lagListe={dim.lagListe}
-						/>
-					);
-				})}
-
-				<LeggTilKnapp
+			<Wrapper>
+				<OverbygningHeader title={'E39 Oppedal - Vågsmyren'} />
+				<DimensjoneringContainer>
+					{dimensjoneringer.map((dim, index) => {
+						return (
+							<Dimensjonering
+								key={index}
+								oppdaterLagListe={(params) => oppdaterLagListe({ ...params, index })}
+								lagListe={dim}
+								mmIPiksler={kalkulererMmIPiksler()}
+							/>
+						);
+					})}
+				</DimensjoneringContainer>
+				<StyledAddButton
 					tekst='Legg til overbygning'
 					icon={'Pluss'}
 					onClickCallback={leggTilDimensjonering}
 				/>
-			</DimensjoneringContainer>
+				<StyledFooter />
+			</Wrapper>
 		</StyledContainer>
 	);
 };
+
+const Wrapper = styled.div`
+	margin: 0 auto;
+	padding: 4rem 4rem 10rem;
+	width: 100%;
+	position: relative;
+	flex: 2 0 calc(100% - 17.5rem);
+`;
+
 const DimensjoneringContainer = styled.div`
-	margin: 4rem auto;
-	min-height: 100dvh;
 	display: flex;
 	flex-wrap: wrap;
-	padding: 0 4rem 15rem;
 	align-content: start;
 	gap: 4rem;
 	width: 100%;
 `;
 
 const StyledContainer = styled.div`
-	display: grid;
-	grid-template-columns: 20rem 1fr;
+	display: flex;
+`;
+
+const StyledAddButton = styled(AddButtom)`
+	margin-top: 1.5rem;
+	width: 100%;
+	max-width: 62rem;
+`;
+
+const StyledFooter = styled(Footer)`
+	// Trekker fra paddingen rundt StyledContainer komponeneter med position absolute ikke ta hensyn til det når det kommer til width
+	width: calc(100% - 8rem);
 `;

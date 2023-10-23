@@ -1,61 +1,74 @@
 import styled from 'styled-components';
 import { Container } from '../styles/BasePageLayout';
 import { TittelLitenTekst, TittelStorTekst } from '../components/atoms/TekstKomponenter.ts';
-import Kort from '../components/atoms/Kort.tsx';
-import { Footer } from '../components/atoms/Knapper/Footer.tsx';
+import { KnappeFooter } from '../components/atoms/Knapper/KnappeFooter.tsx';
 import { useNavigate } from 'react-router-dom';
 import { Urls } from '../lib/Urls.ts';
-import KnappKort from '../components/atoms/Knapper/KnappKort.tsx';
 import { AkselKonfigurasjon } from '../components/domain/DimensjoneringsGrunnlag/AkselKonfigurasjon.tsx';
-import { Felt, TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
-import { useCallback, useState } from 'react';
+import { TrafikkData } from '../components/domain/DimensjoneringsGrunnlag/TrafikkData.tsx';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Kjørefelt } from '../components/domain/DimensjoneringsGrunnlag/Kjørefelt.tsx';
+import { TrafficGroupCalculator } from '../lib/Utils/TrafficGroupCalculator.ts';
+import { Posisjon } from '../components/domain/DimensjoneringsGrunnlag/Posisjon.tsx';
+
+export type KjørefeltType = 1 | 2 | 3 | 4;
+
+export interface IFormInputs {
+	fartsgrense?: number;
+	andeltunge?: number;
+	trafikkvekst?: number;
+	PiggdekkDager?: number;
+	Piggdekkandel?: number;
+	saltingAvVegen?: 'Ja' | 'Nei';
+	kjørefelt?: KjørefeltType;
+	ådt?: number;
+}
+
+export const defaultValues: IFormInputs = {
+	saltingAvVegen: 'Ja',
+};
 
 export const Grunnlag = () => {
 	const navigation = useNavigate();
-	const [trafikkData, setTrafikkData] = useState<Map<Felt, number | undefined>>(
-		new Map([
-			['fartsgrense', undefined],
-			['ådt', undefined],
-			['andeltunge', undefined],
-			['trafikkvekst', undefined],
-		])
-	);
-	const oppdaterTrafikkData = useCallback(
-		(verdi: number, felt: Felt) => {
-			const nyState = new Map(trafikkData);
-			nyState.set(felt, verdi);
-			setTrafikkData(nyState);
-		},
-		[trafikkData]
-	);
+	const methods = useForm<IFormInputs>({
+		defaultValues,
+	});
+	const kalk = new TrafficGroupCalculator({});
+	const onSubmit: SubmitHandler<IFormInputs> = (data) => {
+		kalk.UpdateValues(data);
+		kalk.calculateTrafficGroup();
+		console.log(kalk.trafficGroup);
+	};
+
+	methods.watch((data: IFormInputs) => {
+		kalk.UpdateValues(data);
+		kalk.calculateTrafficGroup();
+	});
+
 	return (
 		<>
-			<StyledContainer>
-				<Header>
-					<TittelStorTekst>Dimensjoneringsgrunnlag</TittelStorTekst>
-				</Header>
-				<HøyreKolonne>
-					<TittelLitenTekst>Antall kjørefelt</TittelLitenTekst>
-					<Kjørefelt>
-						<KnappKort icon={'AvmerkingsBoks'} title={'1-felt'} />
-						<KnappKort icon={'PilNed'} title={'2-felt'} />
-						<KnappKort icon={'PilNed'} title={'3-felt'} />
-						<KnappKort icon={'PilNed'} title={'4-felt'} />
-					</Kjørefelt>
-					<TraffikdataTittel>Trafikkdata</TraffikdataTittel>
-					<TrafikkData feltVerdier={trafikkData} oppdaterVerdi={oppdaterTrafikkData} />
-					<AkselKonfigurasjon />
-				</HøyreKolonne>
-				<Posisjon>
-					<PosisjonInnehold></PosisjonInnehold>
-				</Posisjon>
-			</StyledContainer>
-			<Footer
-				kanppProps={{
-					avbrytOnClick: () => navigation(Urls.posisjon),
-					bekreftOnClick: () => navigation(Urls.dimensjonering),
-				}}
-			/>
+			<FormProvider {...methods}>
+				<form onSubmit={methods.handleSubmit(onSubmit)}>
+					<StyledContainer>
+						<Header>
+							<TittelStorTekst>Dimensjoneringsgrunnlag</TittelStorTekst>
+						</Header>
+						<HøyreKolonne>
+							<TraffikdataTittel>Trafikkdata</TraffikdataTittel>
+							<TrafikkData />
+							<AkselKonfigurasjon />
+							<Kjørefelt />
+						</HøyreKolonne>
+						<Posisjon />
+					</StyledContainer>
+					<KnappeFooter
+						kanppProps={{
+							avbrytOnClick: () => navigation(Urls.posisjon),
+							bekreftOnClick: () => navigation(Urls.dimensjonering),
+						}}
+					/>
+				</form>
+			</FormProvider>
 		</>
 	);
 };
@@ -66,6 +79,7 @@ const StyledContainer = styled(Container)`
 	grid-template-columns: 2fr 1fr;
 	grid-template-rows: 5rem auto;
 	padding-top: 4rem;
+	grid-column-gap: 4rem;
 `;
 
 const Header = styled.div`
@@ -75,20 +89,6 @@ const Header = styled.div`
 `;
 
 const HøyreKolonne = styled.div``;
-
-const Posisjon = styled(Kort)`
-	border-radius: 0;
-`;
-
-const PosisjonInnehold = styled.div`
-	display: grid;
-`;
-
-const Kjørefelt = styled.div`
-	display: flex;
-	column-gap: 1.5rem;
-	margin-top: 1.5rem;
-`;
 
 const TraffikdataTittel = styled(TittelLitenTekst)`
 	margin: 4rem 0 1.5rem;

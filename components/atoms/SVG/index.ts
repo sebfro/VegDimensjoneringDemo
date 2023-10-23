@@ -17,3 +17,8 @@ export { Mappe } from './Mappe.tsx';
 export { LagType1 } from './Lag/LagType1.tsx';
 export { CheckMark } from './CheckMark.tsx';
 export { Rediger } from './Rediger.tsx';
+export { Link } from './Link.tsx';
+export { Mountain } from './Klima/Mountain.tsx';
+export { AirSpeed } from './Klima/AirSpeed.tsx';
+export { AirTemperature } from './Klima/AirTemperature.tsx';
+export { SunRadiation } from './Klima/SunRadiation.tsx';

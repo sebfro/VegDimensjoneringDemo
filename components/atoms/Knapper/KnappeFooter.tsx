@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import HovedKnapp from './HovedKnapp';
-import SekundRKnapp from './SekundærKnapp';
+import HovedKnapp from './PrimaryButton.tsx';
+import SekundRKnapp from './ScondaryButton.tsx';
 
 type FooterProps = {
 	/**Custom class */
@@ -16,7 +16,7 @@ type FooterProps = {
 	loading?: boolean;
 };
 
-export const Footer: FC<FooterProps> = ({
+export const KnappeFooter: FC<FooterProps> = ({
 	className,
 	kanppProps: {
 		avbrytTekst = 'Avbryt',

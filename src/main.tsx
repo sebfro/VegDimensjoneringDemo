@@ -60,7 +60,7 @@ const router = createBrowserRouter(
 			<Route
 				path={Urls.grunnlag}
 				element={
-					<Page tittel={'Grunnlad'}>
+					<Page tittel={'Grunnlag'}>
 						<Grunnlag />
 					</Page>
 				}
