@@ -3,13 +3,13 @@ import { IFormInputs, KjørefeltType } from '../../routes/Grunnlag.tsx';
 type FordelingsFaktor = 1 | 0.5 | 0.45 | 0.4;
 export type TrafficGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
 
-const TrafficGroup: { group: TrafficGroup; treshhold: number }[] = [
-	{ group: 'A', treshhold: 500000 },
-	{ group: 'B', treshhold: 1000000 },
-	{ group: 'C', treshhold: 2000000 },
-	{ group: 'D', treshhold: 3500000 },
-	{ group: 'E', treshhold: 10000000 },
-	{ group: 'F', treshhold: 10000000 },
+const TrafficGroup: { group: TrafficGroup; threshold: number }[] = [
+	{ group: 'A', threshold: 500000 },
+	{ group: 'B', threshold: 1000000 },
+	{ group: 'C', threshold: 2000000 },
+	{ group: 'D', threshold: 3500000 },
+	{ group: 'E', threshold: 10000000 },
+	{ group: 'F', threshold: 10000000 },
 ];
 
 const FordelingsfaktorMap = new Map<KjørefeltType, FordelingsFaktor>([
@@ -69,8 +69,8 @@ export class TrafficGroupCalculator {
 	};
 
 	public calculateTrafficGroup = () => {
-		if (!this.ådt || !this.f || !this.p) return;
-		const antallTungeKjøretøy = this.ådt * (this.andelTunge ?? 0);
+		if (!this.ådt || !this.f || !this.p || !this.andelTunge) return;
+		const antallTungeKjøretøy = this.ådt * this.andelTunge;
 		const n =
 			365 *
 			this.c *
@@ -78,11 +78,11 @@ export class TrafficGroupCalculator {
 			antallTungeKjøretøy *
 			this.f *
 			((Math.pow(1 + 0.01 * this.p, 20) - 1) / (0.01 * this.p));
-		const group = TrafficGroup.find(({ group, treshhold }) => {
+		const group = TrafficGroup.find(({ group, threshold }) => {
 			if (group === 'F') {
 				return group;
 			}
-			if (n <= treshhold) {
+			if (n <= threshold) {
 				return group;
 			}
 		})?.group;
